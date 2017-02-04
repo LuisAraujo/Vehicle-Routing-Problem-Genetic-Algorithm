@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- meta data -->
+    <meta charset="UTF-8">
+    <meta name="description" content="Aplication VRP with genetic algorithm">
+    <meta name="keywords" content="genetic algorithm, js, uefs">
+    <meta name="author" content="Luis Araujo">
+
+    <title>VRP IC</title>
+    <!-- css style -->
+    <link rel="stylesheet" type="text/css" href="stylepage.css">
+    <!-- scripts -->
+    <script src="jquery.js"></script>
+    <script src="view.js"></script>
+    <script src="main.js"></script>
+</head>
+<body>
+
+<div id="title">
+    Vehicle Routing Problem - View
+</div>
+<!-- canvas main -->
+<canvas id="view" width="500" height="500"></canvas>
+
+
+<div id="div-data">
+    <div>
+    <span class="title">Truck: </span> <span id="truck-name">01</span>
+    </div>
+    <div>
+        <span class="title">Route: </span> <span id="truck-routes">01</span>
+    </div>
+    <div>
+      <span class="title">Cost: </span> <span id="truck-cost">100</span>
+    </div>
+</div>
+
+
+<!-- this script run when page is loading -->
+<script>
+//image of truck
+var truck_icon = new Image();
+truck_icon.src = "truck.png";
+
+//image of local
+var local_icon = new Image();
+local_icon.src = "local.png";
+</script>
+
+</body>
+</html>
