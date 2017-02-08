@@ -40,15 +40,19 @@ $(window).on("load",function(){
     arrTruck.push( new Vehicle("truck 5", 200, [arrLocals[0]] ));
     arrTruck.push( new Vehicle("truck 6", 200, [arrLocals[0]] ));
 
-    var populationInitial = createPopulateInitial(arrLocals, arrTruck, 10);
+    //var populationInitial = createPopulateInitial(arrLocals, arrTruck, 10);
+
+    p = new Population(arrLocals, arrTruck, 10);
+    p.generation();
+    p.showConsole();
 
     //draw first population by only teste
-    drawAll(arrLocals, populationInitial[0]);
+    drawAll(arrLocals, p.members[0].route);
 
 
     /** functiosn of interaction **/
     $("#view").click( function(evt){
-        printDataTruck(evt, populationInitial[0]);
+        printDataTruck(evt, p.members[0].route);
     });
 
 });
