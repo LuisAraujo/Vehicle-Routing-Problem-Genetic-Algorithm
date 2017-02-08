@@ -6,14 +6,19 @@
     <meta name="description" content="Aplication VRP with genetic algorithm">
     <meta name="keywords" content="genetic algorithm, js, uefs">
     <meta name="author" content="Luis Araujo">
-
     <title>VRP IC</title>
+
     <!-- css style -->
-    <link rel="stylesheet" type="text/css" href="stylepage.css">
+    <link rel="stylesheet" type="text/css" href="style/stylepage.css">
+    <!-- jquery -->
+    <script src="script/libs/jquery.js"></script>
+
+    <!--class -->
+    <script src="script/model/Local.js"></script>
+    <script src="script/model/Vehicle.js"></script>
     <!-- scripts -->
-    <script src="jquery.js"></script>
-    <script src="view.js"></script>
-    <script src="main.js"></script>
+    <script src="script/view.js"></script>
+    <script src="script/main.js"></script>
 </head>
 <body>
 
@@ -25,14 +30,20 @@
 
 
 <div id="div-data">
-    <div>
-    <span class="title">Truck: </span> <span id="truck-name">01</span>
+    <div id="header-div-data">
+        <span class="title">Truck: </span> <span id="truck-name">01</span>
     </div>
-    <div>
-        <span class="title">Route: </span> <span id="truck-routes">01</span>
-    </div>
-    <div>
-      <span class="title">Cost: </span> <span id="truck-cost">100</span>
+    <div id="content-div-data">
+
+        <div class="item">
+            <span class="title">Route: </span> <span id="truck-routes">01</span>
+        </div>
+        <div class="item">
+            <span class="title">Total Demand: </span> <span id="route-demand">100</span>
+        </div>
+        <div class="item">
+            <span class="title">Cost: </span> <span id="truck-cost">100</span>
+        </div>
     </div>
 </div>
 
@@ -40,12 +51,34 @@
 <!-- this script run when page is loading -->
 <script>
 //image of truck
-var truck_icon = new Image();
-truck_icon.src = "truck.png";
+var truck_icon = [];
+//blue
+truck_icon["#00a"] = new Image();
+truck_icon["#00a"].src = "images/truck_blue.png";
+//green
+truck_icon["#0a0"] = new Image();
+truck_icon["#0a0"].src = "images/truck_green.png";
+//red
+truck_icon["#a00"] = new Image();
+truck_icon["#a00"].src = "images/truck_red.png";
+//purple
+truck_icon["#a0a"] = new Image();
+truck_icon["#a0a"].src = "images/truck_purple.png";
+//yellow
+truck_icon["#aa0"] = new Image();
+truck_icon["#aa0"].src = "images/truck_yellow.png";
+//cyano
+truck_icon["#0aa"] = new Image();
+truck_icon["#0aa"].src = "images/truck_cyano.png";
+
 
 //image of local
 var local_icon = new Image();
-local_icon.src = "local.png";
+local_icon.src = "images/local.png";
+
+//image of local
+var local_icon2 = new Image();
+local_icon2.src = "images/local_center.png";
 </script>
 
 </body>

@@ -1,56 +1,7 @@
 /*This script have class and functions for view aplication*/
 
-
-/*
-Local (Class)
-This class is the local
-attribute:
-name [string] - Is the nome of local
-x [integer] - Is coordinate axes x
-y [interger] - Is coordinate axes y
-route [array] - Is a array of type Local
- */
-function Local(name, x, y){
-    this.name = name;
-    this.x = x;
-    this.y = y;
-    this.route = [];
-}
-/*
-setRoutes (Method)
-This is a method od Local
-parameter
-arrRoutes [array] - is a array of type Local
-*/
-Local.prototype.setRoutes = function(arrRoutes){
-    this.route = arrRoutes;
-}
-
-
-/*
- Vehicle (Class)
- This class is the vehicle
- attribute:
- name [string] - Is the nome of vehicle
- capacity [integer] - Is capacity of vehicle (tonne)
- routes [array] - Is a array of type Local for create the route of vehicle
- */
-function Vehicle(name, capacity, routes){
-    this.name = name;
-    this.capacity = capacity;
-    this.route = routes;
-    this.cost = 0;
-    //calculate cost of route
-    for(var i=0; i<this.route.length-1; i++){
-            this.cost += Math.sqrt( Math.pow( this.route[i].x -  this.route[i+1].x, 2)  + Math.pow(this.route[i].y -  this.route[i+1].y, 2) );
-    };
-
-    this.cost = this.cost.toFixed(2)
-}
-
-
-
-/*** FUNCTIONS ***/
+//this is only array of color for diversify color
+color = ["#00a","#0a0", "#a00", "#a0a", "#aa0", "#0aa"];
 
 /*
  drawLocals (Function)
@@ -67,51 +18,70 @@ function drawLocals(arrLocals){
     for(var i = 0; i < arrLocals.length; i++){
         //set color of name
         ctx.fillStyle = "#000000";
+        ctx.font="bold 12px Arial"
         //print name in x+10 and y - height
-        ctx.fillText (arrLocals[i].name, arrLocals[i].x + 10, arrLocals[i].y - height )
+        var str = arrLocals[i].getName() +" ("+ arrLocals[i].getDemand()+")";
+
+        //avoid name overflow in axis x
+        if(arrLocals[i].getX(0) + ctx.measureText(str).width < 500)
+            ctx.fillText (str, arrLocals[i].getX() + 10, arrLocals[i].getY() - height )
+        else{
+            ctx.fillText (str, arrLocals[i].getX() - ctx.measureText(str).width, arrLocals[i].getY() - height )
+        }
+
+
+        var icon = local_icon;
+
+        //when is a diposit change icon
+        if(arrLocals[i].getType() == "diposit")
+            icon = local_icon2;
+
         //print image in x - (width/2) and y - height
-        ctx.drawImage(local_icon, arrLocals[i].x - (width/2), arrLocals[i].y - height, width, height);
+        ctx.drawImage(icon, arrLocals[i].x - (width/2), arrLocals[i].y - height, width, height);
 
     }
 }
 
 /*
  drawTruck (Function)
- This is a function of draw truck icon in map
- parameter
+ This is a function of draw truck icon in map  parameter, and print
+ your route and total cost os all truck
  arrTruck [array] - is a array of type Vehicle
  */
 function drawTruck(arrTuck){
-    //this is only array of color for diversify color
-    color = ["#00a","#0a0", "#a00", "#a0a", "#aa0", "#0aa"];
+
+    var totalCost = 0;
 
     //trun all array truck
     for(var i = 0; i < arrTuck.length; i++){
         //trun all array route of truck
-        for(var j = 0; j < arrTuck[i].route.length -1 ; j++){
+        var route = arrTuck[i].getRoute();
+        for(var j = 0; j < route.length -1 ; j++){
             //start draw line process
             ctx.beginPath();
             //set color
             ctx.strokeStyle = color[i];
             ctx.lineWidth = 1;
+            ctx.setLineDash([5, 15]);
+
             //start point
-            ctx.moveTo(arrTuck[i].route[j].x, arrTuck[i].route[j].y);
+            ctx.moveTo(route[j].x, route[j].y);
             //end point
-            ctx.lineTo(arrTuck[i].route[j+1].x , arrTuck[i].route[j+1].y );
+            ctx.lineTo(route[j+1].x, route[j+1].y );
             //finish him! [F-A-T-A-L-I-T-Y]
             ctx.stroke();
         }
 
+
+        /*
         //ok it is a way for print your vehicle with color overlay;
         var tintCanvas = document.createElement('canvas');
         tintCanvas.width = 500;
         tintCanvas.height = 500;
+
         var tintCtx = tintCanvas.getContext('2d');
         tintCtx.fillStyle = color[i];
 
-        //sizes
-        var width = 14;
-        var height = 14;
         //print mask in x - width/2 and  y - height/2
         tintCtx.fillRect(arrTuck[i].route[ arrTuck[i].route.length -1 ].x - (width/2) , arrTuck[i].route[ arrTuck[i].route.length -1 ].y - (height/2), width,height);
         tintCtx.globalCompositeOperation = "destination-atop";
@@ -119,7 +89,25 @@ function drawTruck(arrTuck){
         tintCtx.drawImage(truck_icon, arrTuck[i].route[ arrTuck[i].route.length -1 ].x - (width/2), arrTuck[i].route[ arrTuck[i].route.length -1 ].y - (height/2),  width,height);
         //print in context relative position tintCtx ('cause 0 and 0 for position)
         ctx.drawImage(tintCanvas, 0,0);
+        */
     }
+
+    //trun all array truck
+    for(var i = 0; i < arrTuck.length; i++){
+        totalCost += arrTuck[i].getCostRoute();
+        //sizes
+        var width = 20;
+        var height = 20;
+        var route = arrTuck[i].route;
+        if(route.length > 0)
+        ctx.drawImage(truck_icon[color[i]], route[ route.length -1 ].getX() - (width/2) , route[ route.length -1 ].getY() - (height/2), width,height);
+    }
+
+
+    //print cost total
+    ctx.fillText ("Total cost: "+ totalCost.toFixed(2),10, canvas.height - 10);
+
+
 }
 
 
@@ -134,14 +122,25 @@ function drawRoute(arrLocals){
     //turn all array locals
     for(var i = 0; i < arrLocals.length; i++){
         //turn all array routs of any locals
-        for(var j = 0; j < arrLocals[i].route.length; j++){
+        var route = arrLocals[i].getRoute();
+        for(var j = 0; j < route.length; j++){
             //start draw line process
             ctx.beginPath();
-            ctx.strokeStyle = "#fff";
-            ctx.lineWidth = 2;
-            ctx.moveTo(arrLocals[i].x, arrLocals[i].y);
-            ctx.lineTo(arrLocals[i].route[j].x , arrLocals[i].route[j].y );
+            //border
+            ctx.strokeStyle = "#888";
+            ctx.lineCap = "round";
+            ctx.lineWidth = 7;
+            ctx.moveTo(arrLocals[i].getX(), arrLocals[i].getY());
+            ctx.lineTo(route[j].getX(), route[j].getY());
             ctx.stroke();
+
+            ctx.strokeStyle = "#fff";
+            ctx.lineWidth = 6;
+            ctx.moveTo(arrLocals[i].getX(), arrLocals[i].getY());
+            ctx.lineTo(route[j].getX() , route[j].getY());
+            ctx.stroke();
+
+
         }
     }
 
@@ -150,14 +149,15 @@ function drawRoute(arrLocals){
     //turn all array locals
     for(var i = 0; i < arrLocals.length; i++){
         //turn all array routs of any locals
+        var route = arrLocals[i].getRoute();
         for(var j = 0; j < arrLocals[i].route.length; j++){
             //set color of name
-            ctx.fillStyle = "#666";
+            ctx.fillStyle = "#000";
             ctx.font="7px Arial"
             //print name in x+10 and y - height
             // raiz ( (Xa-Xb)² + (Ya-Yb)² )
-            distance = Math.sqrt( Math.pow(arrLocals[i].x -  arrLocals[i].route[j].x, 2)  + Math.pow(arrLocals[i].y -  arrLocals[i].route[j].y, 2) );
-            ctx.fillText (distance.toFixed(2)+" km", (arrLocals[i].x + arrLocals[i].route[j].x) / 2, (arrLocals[i].y+arrLocals[i].route[j].y )/2);
+            distance = Math.sqrt( Math.pow(arrLocals[i].getX() -  route[j].getX(), 2)  + Math.pow(arrLocals[i].getY() -  route[j].getY(), 2) );
+            ctx.fillText (distance.toFixed(2)+" km", (arrLocals[i].getX() + route[j].getX()) / 2, (arrLocals[i].getY()+route[j].getY() )/2);
         }
     }
 }
@@ -174,12 +174,15 @@ function printDataTruck(evt, arrTruck){
     //get relative position mouse click
     var x = evt.pageX - $('#view').offset().left;
     var y = evt.pageY - $('#view').offset().top;
+    var target = false;
+    var totalDemand = 0;
 
     //turn all array or truck
     for(var i= 0; i< arrTruck.length; i++){
           // if click is about turck icon
-          if ( (x >= arrTruck[i].route[ arrTruck[i].route.length-1].x - 14) && (x <= arrTruck[i].route[ arrTruck[i].route.length-1].x + 14 )
-              &&  (y >= arrTruck[i].route[ arrTruck[i].route.length-1].y - 14) && (y <= arrTruck[i].route[ arrTruck[i].route.length-1].y + 14 ) ){
+          var route = arrTruck[i].getRoute();
+          if ( (x >=  route[ route.length-1].getX() - 14) && (x <= route[route.length-1].getX() + 14 )
+              &&  (y >= route[ route.length-1].getY() - 14) && (y <= route[ route.length-1].getY() + 14 ) ){
 
               //show div of info
               if(!$("#div-data").isDisabled)
@@ -190,25 +193,47 @@ function printDataTruck(evt, arrTruck){
               $("#div-data").css("left", evt.pageX);
 
               //set name of truck
-              $("#truck-name").text(arrTruck[i].name);
+              $("#truck-name").text(arrTruck[i].name +" ("+arrTruck[i].capacity+")");
 
               //convert routs in string
               strRouts = "";
-              for(var j = 0; j< arrTruck[i].route.length; j++)
-                  strRouts+= arrTruck[i].route[j].name+" | ";
+              for(var j = 0; j< route.length; j++){
+                  strRouts+= route[j].getName()+" ("+route[j].getDemand()+") | ";
+                  totalDemand +=route[j].getDemand();
+
+              }
 
               //set route name
               $("#truck-routes").text(strRouts);
               //set cost of route
-              $("#truck-cost").text(arrTruck[i].cost);
+              $("#truck-cost").text(arrTruck[i].getCostRoute().toFixed(2));
 
+              $("#route-demand").text(totalDemand);
 
-          }else{
-              //if clik is off out truck icon
-              if($("#div-data").isDisabled)
-                $("#div-data").hide();
+              $("#header-div-data").css("backgroundColor", color[i]);
+              target = true;
+              break;
           }
     }
 
+    if(!target){
+        //if clik is off out truck icon
+        if($("#div-data").css("display") == "block")
+            $("#div-data").hide();
+    }
+
+
+}
+
+
+function drawAll(arrLocals, arrTruck){
+
+    /*functios for draw in canvas*/
+    //draw routes
+    drawRoute(arrLocals);
+    //draw locals (icon)
+    drawLocals(arrLocals);
+    //draw truck (icon)
+    drawTruck(arrTruck);
 
 }
