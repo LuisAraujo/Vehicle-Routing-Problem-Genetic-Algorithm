@@ -57,6 +57,7 @@ function drawTruck(arrTuck){
         //trun all array route of truck
         var route = arrTuck[i].getRoute();
         for(var j = 0; j < route.length -1 ; j++){
+
             //start draw line process
             ctx.beginPath();
             //set color
@@ -72,6 +73,7 @@ function drawTruck(arrTuck){
             ctx.stroke();
         }
 
+        ctx.setLineDash([0,0]);
 
         /*
         //ok it is a way for print your vehicle with color overlay;
@@ -99,8 +101,10 @@ function drawTruck(arrTuck){
         var width = 20;
         var height = 20;
         var route = arrTuck[i].route;
-        if(route.length > 0)
-        ctx.drawImage(truck_icon[color[i]], route[ route.length -1 ].getX() - (width/2) , route[ route.length -1 ].getY() - (height/2), width,height);
+
+        //have local in route (all truck have one local initial = central)
+        if(route.length > 1)
+            ctx.drawImage(truck_icon[color[i]], route[ route.length -1 ].getX() - (width/2) , route[ route.length -1 ].getY() - (height/2), width,height);
     }
 
 
@@ -228,6 +232,8 @@ function printDataTruck(evt, arrTruck){
 
 function drawAll(arrLocals, arrTruck){
 
+    cleanCnavas();
+
     /*functios for draw in canvas*/
     //draw routes
     drawRoute(arrLocals);
@@ -236,4 +242,18 @@ function drawAll(arrLocals, arrTruck){
     //draw truck (icon)
     drawTruck(arrTruck);
 
+}
+
+function drawOnlyRoute(arrLocals, arrTruck){
+    cleanCnavas();
+
+    //draw locals (icon)
+    drawLocals(arrLocals);
+    //draw truck (icon)
+    drawTruck(arrTruck);
+}
+
+
+function cleanCnavas(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 }

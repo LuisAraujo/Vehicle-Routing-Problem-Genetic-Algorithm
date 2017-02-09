@@ -11,11 +11,14 @@ $(window).on("load",function(){
     var arrLocals = [];
     //addeding new locals
     arrLocals.push( new Local("Central", 250, 250, "diposit") );
-    arrLocals.push( new Local("Buger King", 20, 70, "client", 300) );
+    arrLocals.push( new Local("Buger King", 20, 70, "client", 100) );
     arrLocals.push( new Local("MC Donald's", 450, 50, "client", 100) );
     arrLocals.push( new Local("Subway", 250, 120, "client", 100) );
     arrLocals.push( new Local("Bob's", 50, 450, "client", 200) );
     arrLocals.push( new Local("Giraffa's", 400, 450, "client", 100) );
+    arrLocals.push( new Local("Giraffa's 2", 150, 450, "client", 100) );
+    arrLocals.push( new Local("Giraffa's 3", 100, 200, "client", 100) );
+
 
     for(var i = 0; i < arrLocals.length; i++){
         var arr = [];
@@ -35,7 +38,7 @@ $(window).on("load",function(){
     //arrTruck.push( new Vehicle("truck 3", 300, [arrLocals[0], arrLocals[3], arrLocals[4]] ));
     arrTruck.push( new Vehicle("truck 1", 200, [arrLocals[0]] ));
     arrTruck.push( new Vehicle("truck 2", 200, [arrLocals[0]] ));
-    arrTruck.push( new Vehicle("truck 3", 300, [arrLocals[0]] ));
+    arrTruck.push( new Vehicle("truck 3", 200, [arrLocals[0]] ));
     arrTruck.push( new Vehicle("truck 4", 200, [arrLocals[0]] ));
     arrTruck.push( new Vehicle("truck 5", 200, [arrLocals[0]] ));
     arrTruck.push( new Vehicle("truck 6", 200, [arrLocals[0]] ));
@@ -47,12 +50,20 @@ $(window).on("load",function(){
     p.showConsole();
 
     //draw first population by only teste
-    drawAll(arrLocals, p.members[0].route);
+    drawAll(arrLocals, p.members[0].trucks);
 
 
     /** functiosn of interaction **/
     $("#view").click( function(evt){
-        printDataTruck(evt, p.members[0].route);
+        printDataTruck(evt, p.members[0].trucks);
+    });
+
+    $("#bt-draw-route").click(function(evt){
+        drawOnlyRoute(arrLocals, p.members[0].trucks);
+    });
+
+    $("#bt-draw-all").click(function(evt){
+        drawAll(arrLocals, p.members[0].trucks);
     });
 
 });
@@ -63,7 +74,7 @@ $(window).on("load",function(){
 * arrLocal [array] - array of locals
 * arrTrucks [array] - array of trucks
 * sizepopulation [interger] - number of your population
-*/
+
 createPopulateInitial = function(arrLocals, arrTruck, sizepopulation){
 
     arrPopulation = [];
@@ -125,14 +136,14 @@ createPopulateInitial = function(arrLocals, arrTruck, sizepopulation){
     //return population
     return arrPopulation;
 
-}
+}*/
 
 /*
-* verifyLocalIsFree [Method]
-* this method verify if local is free, this means if no one truck covered
-* local [Local] - a local who you wanna verify
-* arrtruck [Array] - array of Trucks
-*/
+ * verifyLocalIsFree [Method]
+ * this method verify if local is free, this means if no one truck covered
+ * local [Local] - a local who you wanna verify
+ * arrtruck [Array] - array of Trucks
+ */
 verifyLocalIsFree = function(local, arrTruck ){
 
     for(var i = 0; i< arrTruck.length; i++){
@@ -141,7 +152,7 @@ verifyLocalIsFree = function(local, arrTruck ){
         for(var j = 0; j< route.length; j++){
             //if 'j' local in rout of 'i' track is iqual local, local not is free :(
             if(route[j] == local)
-              return false;
+                return false;
         }
     }
 

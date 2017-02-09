@@ -1,5 +1,6 @@
 var verbose = false;
 function Population(arrLocals, arrTruck, sizepopulation) {
+    //array of Gene
     this.members = [];
     this.generationNumber = 0;
 
@@ -71,7 +72,7 @@ function Population(arrLocals, arrTruck, sizepopulation) {
 
 Population.prototype.sort = function() {
     this.members.sort(function(a, b) {
-        return a.cost - b.cost;
+        return a.fitness - b.fitness;
     });
 };
 
@@ -82,6 +83,10 @@ Population.prototype.showConsole = function() {
 
 Population.prototype.generation = function(){
     this.sort();
+
+    var childs = this.members[0].crossover(this.members[1]);
+
+    console.log(childs);
 
     //cruzamento (Gene.prototype.crossover) dos melhores genes
 

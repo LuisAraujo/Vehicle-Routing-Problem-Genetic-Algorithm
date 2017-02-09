@@ -24,34 +24,50 @@
     <!-- scripts -->
     <script src="script/view.js"></script>
     <script src="script/main.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Sansita" rel="stylesheet">
 </head>
 <body>
-
 <div id="title">
     Vehicle Routing Problem - View
 </div>
-<!-- canvas main -->
-<canvas id="view" width="500" height="500"></canvas>
 
+<div id="div-menu-left">
+    <div id="bt-draw-all" class="bt-menu-left">Draw all paths</div>
+    <div  id="bt-draw-route" class="bt-menu-left">Draw only routes</div>
 
-<div id="div-data">
-    <div id="header-div-data">
-        <span class="title">Truck: </span> <span id="truck-name">01</span>
+    <div class="line">Draw each truck</div>
+
+    <div id="div-select">
+        <select>
+            <option>truck 1</option>
+        </select>
     </div>
-    <div id="content-div-data">
 
-        <div class="item">
-            <span class="title">Route: </span> <span id="truck-routes">01</span>
+</div>
+<div id="div-canvas">
+    <!-- canvas main -->
+    <canvas id="view" width="500" height="500"></canvas>
+
+    <!-- div data turck -->
+    <div id="div-data">
+        <div id="header-div-data">
+            <span class="title">Truck: </span> <span id="truck-name">01</span>
         </div>
-        <div class="item">
-            <span class="title">Total Demand: </span> <span id="route-demand">100</span>
-        </div>
-        <div class="item">
-            <span class="title">Cost: </span> <span id="truck-cost">100</span>
+        <div id="content-div-data">
+
+            <div class="item">
+                <span class="title">Route: </span> <span id="truck-routes">01</span>
+            </div>
+            <div class="item">
+                <span class="title">Total Demand: </span> <span id="route-demand">100</span>
+            </div>
+            <div class="item">
+                <span class="title">Cost: </span> <span id="truck-cost">100</span>
+            </div>
         </div>
     </div>
 </div>
-
 
 <!-- this script run when page is loading -->
 <script>
