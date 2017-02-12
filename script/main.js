@@ -8,16 +8,28 @@ $(window).on("load",function(){
 
     /* setting locals */
     //arrLocals is a array with all locals
-    var arrLocals = [];
+    window.arrLocals = [];
     //addeding new locals
     arrLocals.push( new Local("Central", 250, 250, "diposit") );
     arrLocals.push( new Local("Buger King", 20, 70, "client", 100) );
     arrLocals.push( new Local("MC Donald's", 450, 50, "client", 100) );
     arrLocals.push( new Local("Subway", 250, 120, "client", 100) );
-    arrLocals.push( new Local("Bob's", 50, 450, "client", 200) );
-    arrLocals.push( new Local("Giraffa's", 400, 450, "client", 100) );
-    arrLocals.push( new Local("Giraffa's 2", 150, 450, "client", 100) );
+    arrLocals.push( new Local("Bob's", 50, 450, "client", 100) );
+    arrLocals.push( new Local("Giraffa's", 450, 450, "client", 100) );
+    arrLocals.push( new Local("Giraffa's 2", 150, 430, "client", 100) );
     arrLocals.push( new Local("Giraffa's 3", 100, 200, "client", 100) );
+/*
+    arrLocals.push( new Local("Buger King 2", 20, 30, "client", 100) );
+    arrLocals.push( new Local("MC Donald's 2", 120, 150, "client", 100) );
+    arrLocals.push( new Local("Subway 2", 400, 200, "client", 100) );
+    arrLocals.push( new Local("Bob's 2", 450, 450, "client", 100) );
+
+    arrLocals.push( new Local("Buger King 3", 130, 120, "client", 100) );
+    arrLocals.push( new Local("MC Donald's 3", 350, 150, "client", 100) );
+    arrLocals.push( new Local("Subway 3", 260, 190, "client", 100) );
+    arrLocals.push( new Local("Bob's 3", 50, 160, "client", 100) ); */
+
+
 
 
     for(var i = 0; i < arrLocals.length; i++){
@@ -31,41 +43,63 @@ $(window).on("load",function(){
     }
 
     //arrLocals is a array with all trucks
-    var arrTruck = [];
+    window.arrTrucks = [];
     //addeding new truck
-    //arrTruck.push( new Vehicle("truck 1", 100, [arrLocals[0], arrLocals[1]] ));
-    //arrTruck.push( new Vehicle("truck 2", 300, [arrLocals[0], arrLocals[2], arrLocals[3]] ));
-    //arrTruck.push( new Vehicle("truck 3", 300, [arrLocals[0], arrLocals[3], arrLocals[4]] ));
-    arrTruck.push( new Vehicle("truck 1", 200, [arrLocals[0]] ));
-    arrTruck.push( new Vehicle("truck 2", 200, [arrLocals[0]] ));
-    arrTruck.push( new Vehicle("truck 3", 200, [arrLocals[0]] ));
-    arrTruck.push( new Vehicle("truck 4", 200, [arrLocals[0]] ));
-    arrTruck.push( new Vehicle("truck 5", 200, [arrLocals[0]] ));
-    arrTruck.push( new Vehicle("truck 6", 200, [arrLocals[0]] ));
+    arrTrucks.push( new Vehicle("truck 1", 200) );
+    arrTrucks.push( new Vehicle("truck 2", 200) );
+    arrTrucks.push( new Vehicle("truck 3", 200) );
+    arrTrucks.push( new Vehicle("truck 4", 200) );
+    arrTrucks.push( new Vehicle("truck 5", 200) );
+   /* arrTrucks.push( new Vehicle("truck 5", 200) );
+    arrTrucks.push( new Vehicle("truck 6", 200) );
+    arrTrucks.push( new Vehicle("truck 7", 200) );
+    arrTrucks.push( new Vehicle("truck 8", 200) );
+    //arrTrucks.push( new Vehicle("truck 3", 200, 0) );
+    //arrTrucks.push( new Vehicle("truck 4", 200, 0) );
+
+    /*var arrRoute = [];
+    var r = new Route();
+    r.startRoute();
+
+    r.setLocal(arrLocals[1].getName(), arrTrucks[0].getName());
+    r.setLocal(arrLocals[2].getName(), arrTrucks[0].getName());
+
+    r.setLocal(arrLocals[3].getName(), arrTrucks[1].getName());
+    r.setLocal(arrLocals[4].getName(), arrTrucks[1].getName());
+
+    r.endRoute();
+
+    arrRoute.push(r);*/
+
 
     //var populationInitial = createPopulateInitial(arrLocals, arrTruck, 10);
 
-    p = new Population(arrLocals, arrTruck, 10);
-    p.generation();
-    p.showConsole();
+    var p = new Population(arrLocals, arrTrucks, 10);
+    p.generation(
+        function(param){
+            drawOnlyRoute(param[0].locals);
+        });
+    //p.showConsole();
 
     //draw first population by only teste
-    drawAll(arrLocals, p.members[0].trucks);
+    //drawOnlyRoute(arrLocals, p.members[0].trucks);
 
 
-    /** functiosn of interaction **/
+
+
+    /** functiosn of interaction
     $("#view").click( function(evt){
-        printDataTruck(evt, p.members[0].trucks);
+        printDataTruck(evt,c.locals);
     });
 
     $("#bt-draw-route").click(function(evt){
-        drawOnlyRoute(arrLocals, p.members[0].trucks);
+        drawOnlyRoute(c.locals);
     });
 
     $("#bt-draw-all").click(function(evt){
-        drawAll(arrLocals, p.members[0].trucks);
+        drawAll(c.locals);
     });
-
+     **/
 });
 
 /* createPopulateInitial (method)

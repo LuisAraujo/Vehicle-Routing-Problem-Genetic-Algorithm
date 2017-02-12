@@ -1,130 +1,182 @@
-function Gene(trucks){
-    this.trucks = trucks;
-
-    //fitness?
-    this.fitness = this.calcFitness();
+function Gene(route){
+    this.locals = route;
+    this.fitness = 0;
+    this.calcFitness();
 }
 
 Gene.prototype.calcFitness= function(){
-    var fitness = 0;
 
-    for(var i =0; i< this.trucks.length; i++)
-        fitness += this.trucks[i].getCost();
-
-    return fitness;
+    var fitness = this.locals.getCost();
+    this.fitness = fitness;
 
 }
 
 
 Gene.prototype.crossover = function(anotherGene){
-    var tempRoute1 = [];
-    var tempRoute2 = [];
-    var qtdlocalTotal = 0;
-    var qtdlocalTotalInChilds = 0;
+    console.log("CROSSS")
 
-    /**first child **/
-    for(var i = 0; i< this.trucks.length; i++){
-        qtdlocalTotal += this.trucks[i].getRoute().length*2;
+    var tempRoute1 = new Route(copyArray(arrLocals), copyArray(arrTrucks) );
+    tempRoute1.startRoute();
+    var tempRoute2 = new Route(copyArray(arrLocals), copyArray(arrTrucks) );
+    tempRoute2.startRoute();
+
+    var conflit1 = false;
+    var conflit2 = false;
+
+   a = function(o, locals, anotherGene, callback){
+
         //if is pair
-        if(i%2 == 0){
-             //child 1
-             if(!verifyConflitLocal(tempRoute1, this.trucks[i]) ){
-                //verify it the route and the truck is e same route
-                tempRoute1.push( this.trucks[i]);
-                 qtdlocalTotalInChilds += this.trucks[i].getRoute().length;
-                 console.log("NO Conflit with "+this.trucks[i].name)
-             }else{
-                 console.log("Conflit with "+this.trucks[i].name)
-             }
+        if(o%2 == 0){
+            if(locals.route[o][0].getName()!="Central"){
 
-            //child 2
-            if(!verifyConflitLocal(tempRoute2, anotherGene.trucks[i]) ){
-                //verifica se a rota e o caminhão já estão nessa rota
-                tempRoute2.push(anotherGene.trucks[i]);
-                qtdlocalTotalInChilds += anotherGene.trucks[i].getRoute().length;
-                console.log("NO Conflit with "+this.trucks[i].name)
-            }else{
-                console.log("Conflit with "+this.trucks[i].name)
+                c1 = tempRoute1.setLocal(locals.route[o][0].getName(), locals.route[o][1].getName());
+                c2 = tempRoute2.setLocal(anotherGene.locals.route[o][0].getName(), anotherGene.locals.route[o][1].getName());
+
+                if(c1)
+                    conflit1 = true;
+                if(c2)
+                    conflit2 = true;
             }
 
+         //no is pair
         }else{
-            //child 1
-            if(!verifyConflitLocal(tempRoute2, this.trucks[i]) ){
-                //verifica se a rota e o caminhão já estão nessa rota
-                tempRoute2.push(this.trucks[i]);
-                console.log("NO Conflit with "+this.trucks[i].name)
-                qtdlocalTotalInChilds += this.trucks[i].getRoute().length;
-            }else{
-                console.log("Conflit with "+this.trucks[i].name)
+            console.log(o, locals.route[o]);
+            if(locals.route[o][0].getName()!="Central"){
+
+                c1 = tempRoute1.setLocal(anotherGene.locals.route[o][0].getName(), anotherGene.locals.route[o][1].getName());
+                c2 = tempRoute2.setLocal(locals.route[o][0].getName(), locals.route[o][1].getName());
+
+                if(c1)
+                    conflit1 = true;
+                if(c2)
+                    conflit2 = true;
             }
 
-            //child 2
-            if(!verifyConflitLocal(tempRoute1, anotherGene.trucks[i]) ){
-                //verifica se a rota e o caminhão já estão nessa rota
-                tempRoute1.push( anotherGene.trucks[i]);
-                qtdlocalTotalInChilds += anotherGene.trucks[i].getRoute().length;
-                console.log("NO Conflit with "+this.trucks[i].name)
-            }else{
-                console.log("Conflit with "+this.trucks[i].name)
+        }
+
+        if(o < locals.route.length-1){
+            a(++o, locals, anotherGene, callback);
+        }else{
+            if(conflit1){
+                //console.log("conf 1")
+               callback(tempRoute1);
+            }
+
+            if(conflit2){
+                //console.log("conf 2")
+                callback(tempRoute2);
             }
         }
-    }
 
-    /**secound child
-    for(var i = 0; i< this.trucks.length; i++){
-        qtdlocalTotal += this.trucks[i].getRoute().length;
-        //invert location
-        if(i%2 == 0){
-            if(!verifyConflitLocal(tempRoute2, anotherGene.trucks[i]) ){
-                //verifica se a rota e o caminhão já estão nessa rota
-                tempRoute2.push(anotherGene.trucks[i]);
-                qtdlocalTotalInChilds += anotherGene.trucks[i].getRoute().length;
-                console.log("NO Conflit with "+this.trucks[i].name)
-            }else{
-                console.log("Conflit with "+this.trucks[i].name)
-            }
-        }else{
-            if(!verifyConflitLocal(tempRoute1, anotherGene.trucks[i]) ){
-                //verifica se a rota e o caminhão já estão nessa rota
-                tempRoute1.push( anotherGene.trucks[i]);
-                qtdlocalTotalInChilds += anotherGene.trucks[i].getRoute().length;
-                console.log("NO Conflit with "+this.trucks[i].name)
-            }else{
-                console.log("Conflit with "+this.trucks[i].name)
-            }
-        }
-    }
-     **/
+    };
 
-    console.log(qtdlocalTotal, qtdlocalTotalInChilds);
+    a(0, this.locals, anotherGene, this.repair);
+
+
+    tempRoute1.endRoute();
+    tempRoute2.endRoute();
+
 
     return [new Gene(tempRoute1), new Gene(tempRoute2)];
+
 }
 
+/*
 Gene.prototype.mutation = function(){
 
-}
+   this.locals.route.forEach(function(item, index){
+        var indexRandom = parseInt( (Math.random() * (this.locals.route.length)), 0);
+        if (this.locals.route[indexRandom][0].getName() != "Central") {
 
+            if(item[0].getDemand() == this.locals.route[indexRandom][0].getDemand()){
 
-verifyConflitLocal = function(arrTrucks, truck){
-    var conflit = false;
-    //get route of truck
-    var routeOftruck  = truck.getRoute();
-    for(var l = 0; l < arrTrucks.length; l++){
-        //using same truck
-        if(truck.name == arrTrucks[l].name){
-            return true;
+                var localAux = item[0];
+                item[0] = this.locals.route[indexRandom][0];
+                this.locals.route[indexRandom][0] = localAux;
+
+                console.log("Mutando " + item[0].getName()+" por "+  this.locals.route[indexRandom][0].getName(), indexRandom);
+          }
         }
 
-        //pass same route
-        var routes = arrTrucks[l].getRoute();
-        for(var i = 0; i < routes.length; i++){
-            for(var j = 0; j < routeOftruck.length; j++){
-                //console.log(routes[i].name, routeOftruck[j].name)
-                if((routes[i].name == routeOftruck[j].name) && (routes[i].name !="Central"))
-                    return true;
+   }, this);
+
+    this.fitness = this.calcFitness();
+
+}*/
+
+
+Gene.prototype.repair = function(route){
+    console.log("repairrr");
+    var locals = route.getLocalNotCovered();
+    var trucks = route.getTrucksWithCapacity();
+
+    console.log("locias nao cobertos");
+    console.log(locals, trucks);
+
+    while (locals.length != 0){
+        for(var k = 0; k < trucks.length; k++){
+            var conflit = route.setLocal(locals[0],  trucks[k]);
+            if(!conflit){
+                locals = route.getLocalNotCovered();
+                trucks = route.getTrucksWithCapacity();
+                console.log("locias nao cobertos");
+                console.log(locals, trucks);
+                break;
             }
         }
     }
-    return false;
+
+    /* //console.log("locias nao cobertos");
+    //console.log(locals, locals.length);
+
+    var aa = function(locals, trucks){
+        //console.log("CARALHOOOO... "+locals.length);
+        if(locals.length!=0){
+            var b = function(j, trucks, locals){
+
+                var conflit = route.setLocal(locals[0], trucks[j].getName(), true);
+
+                if(!conflit){
+                    indexLocal++;
+                    locals = route.getLocalNotCovered();
+                    console.log("locias nao cobertos");
+                    console.log(locals, locals.length);
+                }
+
+                if((j < trucks.length-1) && (conflit)){
+                    setTimeout(
+                        function(){b(++j, trucks, locals)
+                        },100);
+                }
+            }
+
+            setTimeout( function(){ aa(locals, trucks) }, 100);
+            b(0, trucks, locals);
+       }
+    }
+
+    aa(locals, trucks);
+
+*/
+
+//this.calcFitness();
+
 }
+
+/*
+* verifyConflitLocal [method]
+* arrTruck [array] - Array of Trucks
+* truck [Truck]
+* return 1 if have conflit of truck and 2 for conflit of route
+*/
+verifyConflitLocal = function(arrTrucks, truck){
+
+}
+
+
+
+repairRoute = function (tempRoute1, trucks, conflit, i){
+
+}
+
+

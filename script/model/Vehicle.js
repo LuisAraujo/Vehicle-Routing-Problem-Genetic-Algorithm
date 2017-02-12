@@ -6,124 +6,61 @@
  capacity [integer] - Is capacity of vehicle (tonne)
  routes [array] - Is a array of type Local for create the route of vehicle
 */
-function Vehicle(name, capacity, route){
+function Vehicle(name, capacityTotal, capacityCurrent){
 
     this.name = name;
-    this.capacity = capacity;
-    //verify if route is valid
-    this.route = this.setRoute(route);
-    //calculating cost route
-    this.cost = this.calcCostRoute();
+    this.capacityTotal = capacityTotal;
+    if(capacityCurrent != undefined)
+        this.capacityCurrent = capacityCurrent;
+    else
+        this.capacityCurrent = capacityTotal;
+
 }
 
-/*
-* getCostRoute (Method)
-* This method return cost of route
-*/
-Vehicle.prototype.getCostRoute = function(){
-    return this.cost;
+/** setters and getters **/
+
+Vehicle.prototype.setCapacityTotal = function(capacityTotal){
+    this.capacityTotal = capacityTotal;
 }
 
-/*
-* setRoute(Method)
-* This method set and verify routes
-*/
-Vehicle.prototype.setRoute = function(arrRoutes){
-    //The total demand of all points in routes not should superate the caparity of truck
-    var totalDemand = 0;
-
-    for(var i=0; i< arrRoutes.length; i++){
-      totalDemand += arrRoutes[i].getDemand();
-     }
-
-    if(this.capacity < totalDemand){
-        throw {name : "Error 001", message : "This Demand is bigger who capacity of truck '"+this.name+"'! "+this.capacity+"/"+totalDemand};
-    }else{
-        return arrRoutes;
-    }
+Vehicle.prototype.setCapacityCurrent = function(capacityCurrent){
+    this.capacityCurrent = capacityCurrent;
 }
 
-/*
-* calcCostRoute (Method)
-* This method to calculate the cost of route
-*/
-Vehicle.prototype.calcCostRoute = function(){
-    var cost = 0;
-    //calculate cost of route
-    for(var i=0; i<this.route.length-1; i++){
-        cost += Math.sqrt( Math.pow( this.route[i].x -  this.route[i+1].x, 2)  + Math.pow(this.route[i].y -  this.route[i+1].y, 2) );
-    }
 
-    return cost;
+Vehicle.prototype.getCapacityTotal = function(){
+    return this.capacityTotal;
 }
 
-/** getters **/
-
-Vehicle.prototype.getCapacity = function(){
-    return this.capacity;
+Vehicle.prototype.getCapacityCurrent = function(){
+    return this.capacityCurrent;
 }
-
 
 
 Vehicle.prototype.getName = function(){
     return this.name;
 }
 
-
-
-Vehicle.prototype.getRoute = function(){
-    return this.route;
+Vehicle.prototype.addDemand = function(demand){
+    this.capacityCurrent -= demand;
 }
 
-Vehicle.prototype.getCost = function(){
-    return this.cost;
-}
+Vehicle.prototype.getDemand = function(){
+    var tempCapacityCurrente = 0;
 
+    if(this.capacityCurrent < 0)
+      tempCapacityCurrente = -this.capacityCurrent;
+    else
+      tempCapacityCurrente = this.capacityCurrent;
 
-Vehicle.prototype.addLocal = function(local){
-    this.route.push(local);
-    this.cost = this.calcCostRoute();
-}
-
-
-Vehicle.prototype.getDemandCovered = function(){
-    var demand = 0;
-    //get total value of demand in route this truck
-    for(var i =0; i<this.route.length; i++){
-        demand += this.route[i].getDemand();
-    }
-
-    return demand;
-
+    return this.capacityTotal - tempCapacityCurrente;
 }
 
 
 Vehicle.prototype.copy = function(){
-    var newroute = [];
-    for (var j=0; j< this.route.length; j++)
-        newroute.push(this.route[j].copy());
-
-    return new Vehicle(this.name, this.capacity, newroute);
+      return new Vehicle(this.name, this.capacityTotal, this.capacityCurrent);
 }
 
 
-/*
- * verifyHaveCapacity  [Method]
- * this method verify if truck have capacity for more one demand
- * truck [Vehicle] - a truck who you wanna verify
- * newDemand [integer] - the value of new demand
- */
-Vehicle.prototype.verifyHaveCapacity = function(newDemand){
 
-    //get total value of demand in route this truck
-    var demand = this.getDemandCovered();
-
-    //if have capacity for new demand
-
-    if(this.getCapacity() >= demand + newDemand ){
-        return true;
-    }
-
-    return false;
-}
 
