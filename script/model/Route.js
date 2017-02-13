@@ -128,20 +128,28 @@ Route.prototype.setRoute = function(arrRoutes){
 
 Route.prototype.getLocalNotCovered = function(){
       var locals = [];
+      var localsCov = [];
 
-      for(var i = 0; i< this.locals.length; i++){
+      for(var i = 1; i< this.locals.length; i++){
           var flag = false;
           for(var j = 0; j< this.route.length; j++){
-             if(this.locals[i].getName() == this.route[j][0].getName())
+             if(this.locals[i].getName() == this.route[j][0].getName()){
+                 if(flag)
+                   console.log("ATENDE MAIS DE UMA VEZ: "+this.route[j][0].getName())
+
                  flag = true;
+                 //break;
+             }
           }
 
           if(!flag){
               locals.push(this.locals[i].getName())
+          }else{
+              localsCov.push(this.locals[i].getName())
           }
       }
 
-    return locals;
+    return [locals, localsCov];
 
 };
 
@@ -149,12 +157,14 @@ Route.prototype.getLocalNotCovered = function(){
 
 Route.prototype.getTrucksWithCapacity = function(){
     var trucks = [];
+    var trucksCap = [];
 
-    for(var i = 0; i< this.trucks.length; i++){
-        if(this.trucks[i].getCapacityCurrent() > 0){
-            trucks.push(this.trucks[i].getName());
+    for(var l = 0; l< this.trucks.length; l++){
+        if(this.trucks[l].getCapacityCurrent() > 0){
+            trucks.push(this.trucks[l].getName());
+            trucksCap.push(this.trucks[l].getCapacityCurrent());
         }
     }
 
-    return trucks;
+    return [trucks, trucksCap];
 };

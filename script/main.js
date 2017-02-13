@@ -49,36 +49,14 @@ $(window).on("load",function(){
     arrTrucks.push( new Vehicle("truck 2", 200) );
     arrTrucks.push( new Vehicle("truck 3", 200) );
     arrTrucks.push( new Vehicle("truck 4", 200) );
-    arrTrucks.push( new Vehicle("truck 5", 200) );
-   /* arrTrucks.push( new Vehicle("truck 5", 200) );
-    arrTrucks.push( new Vehicle("truck 6", 200) );
-    arrTrucks.push( new Vehicle("truck 7", 200) );
-    arrTrucks.push( new Vehicle("truck 8", 200) );
-    //arrTrucks.push( new Vehicle("truck 3", 200, 0) );
-    //arrTrucks.push( new Vehicle("truck 4", 200, 0) );
-
-    /*var arrRoute = [];
-    var r = new Route();
-    r.startRoute();
-
-    r.setLocal(arrLocals[1].getName(), arrTrucks[0].getName());
-    r.setLocal(arrLocals[2].getName(), arrTrucks[0].getName());
-
-    r.setLocal(arrLocals[3].getName(), arrTrucks[1].getName());
-    r.setLocal(arrLocals[4].getName(), arrTrucks[1].getName());
-
-    r.endRoute();
-
-    arrRoute.push(r);*/
-
-
-    //var populationInitial = createPopulateInitial(arrLocals, arrTruck, 10);
+    //arrTrucks.push( new Vehicle("truck 5", 200) );
 
     var p = new Population(arrLocals, arrTrucks, 10);
     p.generation(
         function(param){
             drawOnlyRoute(param[0].locals);
         });
+
     //p.showConsole();
 
     //draw first population by only teste

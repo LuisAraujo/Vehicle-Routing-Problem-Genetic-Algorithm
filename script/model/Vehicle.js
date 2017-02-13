@@ -10,6 +10,7 @@ function Vehicle(name, capacityTotal, capacityCurrent){
 
     this.name = name;
     this.capacityTotal = capacityTotal;
+
     if(capacityCurrent != undefined)
         this.capacityCurrent = capacityCurrent;
     else

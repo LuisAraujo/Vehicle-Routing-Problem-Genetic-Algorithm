@@ -95,9 +95,9 @@ Population.prototype.generation = function(callback){
 
                // console.log("Em "+p+" - MUTATION... by "+ members[p].locals.route[h][1].getName()+" for "+members[p].locals.route[indexRandom][1].getName());
 
-                var localAux = members[p].locals.route[h][0];
-                members[p].locals.route[h][0] = members[p].locals.route[indexRandom][0];
-                members[p].locals.route[indexRandom][0] = localAux;
+                var localAux = members[p].locals.route[h][1];
+                members[p].locals.route[h][1] = members[p].locals.route[indexRandom][1];
+                members[p].locals.route[indexRandom][1] = localAux;
             }
 
 
@@ -129,17 +129,17 @@ Population.prototype.generation = function(callback){
     }
 
 
-    /*var a = function(members, i){
+    var a = function(members, i){
         console.log("fitness: "+members[i].fitness);
         if(i < members.length-1)
             setTimeout(a(members, ++i), 100);
-    }*/
+    }
 
     //a(this.members, 0);
 
     this.generationNumber++;
 
-
+    callback(this.members);
     window.setTimeout(function(){ this.generation(callback); }.bind(this), 1000);
 
 

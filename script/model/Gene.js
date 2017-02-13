@@ -28,7 +28,7 @@ Gene.prototype.crossover = function(anotherGene){
         //if is pair
         if(o%2 == 0){
             if(locals.route[o][0].getName()!="Central"){
-
+                 console.log(locals.route[o][0].getName(), anotherGene.locals.route[o][0].getName())
                 c1 = tempRoute1.setLocal(locals.route[o][0].getName(), locals.route[o][1].getName());
                 c2 = tempRoute2.setLocal(anotherGene.locals.route[o][0].getName(), anotherGene.locals.route[o][1].getName());
 
@@ -40,8 +40,10 @@ Gene.prototype.crossover = function(anotherGene){
 
          //no is pair
         }else{
-            console.log(o, locals.route[o]);
+            //console.log(o, locals.route[o]);
             if(locals.route[o][0].getName()!="Central"){
+
+                console.log(locals.route[o][0].getName(), anotherGene.locals.route[o][0].getName())
 
                 c1 = tempRoute1.setLocal(anotherGene.locals.route[o][0].getName(), anotherGene.locals.route[o][1].getName());
                 c2 = tempRoute2.setLocal(locals.route[o][0].getName(), locals.route[o][1].getName());
@@ -106,21 +108,30 @@ Gene.prototype.mutation = function(){
 
 
 Gene.prototype.repair = function(route){
-    console.log("repairrr");
-    var locals = route.getLocalNotCovered();
-    var trucks = route.getTrucksWithCapacity();
+    console.log("***REPARANDO***");
+    var l = route.getLocalNotCovered();
+    var locals = l[0];
+    var t = route.getTrucksWithCapacity();
+    var trucks = t[0];
 
-    console.log("locias nao cobertos");
-    console.log(locals, trucks);
+    console.log("LOCAIS NÃO COBERTOS x COBERTOS");
+    console.log(locals, l[1]);
+    console.log("CAMINHÕES COM CAPACIDADE x CAPACIDADE");
+    console.log(trucks, t[1]);
 
     while (locals.length != 0){
         for(var k = 0; k < trucks.length; k++){
             var conflit = route.setLocal(locals[0],  trucks[k]);
             if(!conflit){
-                locals = route.getLocalNotCovered();
-                trucks = route.getTrucksWithCapacity();
-                console.log("locias nao cobertos");
-                console.log(locals, trucks);
+                l = route.getLocalNotCovered();
+                locals = l[0];
+                t = route.getTrucksWithCapacity();
+                trucks = t[0];
+                console.log("LOCAIS NÃO COBERTOS x COBERTOS");
+                console.log(locals, l[1]);
+                console.log("CAMINHÕES COM CAPACIDADE x CAPACIDADE");
+                console.log(trucks, t[1]);
+
                 break;
             }
         }
