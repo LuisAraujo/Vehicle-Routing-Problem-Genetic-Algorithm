@@ -19,11 +19,13 @@
 
 
     <!--class -->
+
     <script src="script/model/Local.js"></script>
     <script src="script/model/Vehicle.js"></script>
+    <script src="script/model/Statistic.js"></script>
     <script src="script/model/Route.js"></script>
     <!-- scripts -->
-    <script src="script/view.js"></script>
+    <script src="script/View.js"></script>
     <script src="script/main.js"></script>
 
    <!-- <link href="https://fonts.googleapis.com/css?family=Sansita" rel="stylesheet"> -->
@@ -67,34 +69,11 @@
 <!-- this script run when page is loading -->
 <script>
 
-
 //image of truck
 var truck_icon = [];
 //blue
-truck_icon["#00a"] = new Image();
-truck_icon["#00a"].src = "images/truck_blue.png";
-//green
-truck_icon["#0a0"] = new Image();
-truck_icon["#0a0"].src = "images/truck_green.png";
-//red
-truck_icon["#a00"] = new Image();
-truck_icon["#a00"].src = "images/truck_red.png";
-//purple
-truck_icon["#a0a"] = new Image();
-truck_icon["#a0a"].src = "images/truck_purple.png";
-//yellow
-truck_icon["#aa0"] = new Image();
-truck_icon["#aa0"].src = "images/truck_yellow.png";
-//cyano
-truck_icon["#0aa"] = new Image();
-truck_icon["#0aa"].src = "images/truck_cyano.png";
-
-
-truck_icon["#0a1"] = new Image();
-truck_icon["#0a1"].src = "images/truck_blue.png";
-
-truck_icon["#01a"] = new Image();
-truck_icon["#01a"].src = "images/truck_blue.png";
+truck_icon[0] = new Image();
+truck_icon[0].src = "images/truck.png";
 
 //image of local
 var local_icon = new Image();

@@ -1,10 +1,18 @@
 /* this script run when page is loaded*/
+const  MODE_SEL_ELITIST = 0;
+const  MODE_SEL_SURVIVAL = 1;
+
+const  MODE_VAR_CHANGEROUTE = 0;
+const  MODE_VAR_CHANGEORDERROUTE = 1;
 
 $(window).on("load",function(){
      //get canvas of html
-     canvas = document.getElementById("view");
+     var canvas = document.getElementById("view");
      //get context 2d of canvas
-     ctx = canvas.getContext("2d");
+     var ctx = canvas.getContext("2d");
+
+    window.view = new View(canvas, ctx);
+    window.verbose = false;
 
     /* setting locals */
     //arrLocals is a array with all locals
@@ -17,21 +25,21 @@ $(window).on("load",function(){
     arrLocals.push( new Local("Bob's", 50, 450, "client", 100) );
     arrLocals.push( new Local("Giraffa's", 450, 450, "client", 100) );
     arrLocals.push( new Local("Giraffa's 2", 150, 430, "client", 100) );
-    arrLocals.push( new Local("Giraffa's 3", 100, 200, "client", 100) );
-/*
-    arrLocals.push( new Local("Buger King 2", 20, 30, "client", 100) );
+    arrLocals.push( new Local("Giraffa's 3", 100, 300, "client", 100) );
+
+    arrLocals.push( new Local("Buger King 2", 240, 370, "client", 100) );
     arrLocals.push( new Local("MC Donald's 2", 120, 150, "client", 100) );
     arrLocals.push( new Local("Subway 2", 400, 200, "client", 100) );
-    arrLocals.push( new Local("Bob's 2", 450, 450, "client", 100) );
+    arrLocals.push( new Local("Bob's 2", 450, 330, "client", 100) );
 
-    arrLocals.push( new Local("Buger King 3", 130, 120, "client", 100) );
+    arrLocals.push( new Local("Buger King 3", 200, 80, "client", 100) );
     arrLocals.push( new Local("MC Donald's 3", 350, 150, "client", 100) );
     arrLocals.push( new Local("Subway 3", 260, 190, "client", 100) );
-    arrLocals.push( new Local("Bob's 3", 50, 160, "client", 100) ); */
+    arrLocals.push( new Local("Bob's 3", 50, 200, "client", 100) );
 
 
 
-
+    //criate way for all locals (is possible go to any local from any local)
     for(var i = 0; i < arrLocals.length; i++){
         var arr = [];
         for(var j = 0; j < arrLocals.length; j++){
@@ -42,134 +50,36 @@ $(window).on("load",function(){
         }
     }
 
+
     //arrLocals is a array with all trucks
     window.arrTrucks = [];
     //addeding new truck
-    arrTrucks.push( new Vehicle("truck 1", 200) );
-    arrTrucks.push( new Vehicle("truck 2", 200) );
-    arrTrucks.push( new Vehicle("truck 3", 200) );
-    arrTrucks.push( new Vehicle("truck 4", 200) );
-    //arrTrucks.push( new Vehicle("truck 5", 200) );
-
-    var p = new Population(arrLocals, arrTrucks, 10);
-    p.generation(
-        function(param){
-            drawOnlyRoute(param[0].locals);
-        });
-
-    //p.showConsole();
-
-    //draw first population by only teste
-    //drawOnlyRoute(arrLocals, p.members[0].trucks);
+    arrTrucks.push( new Vehicle("truck 1", 400) );
+    arrTrucks.push( new Vehicle("truck 2", 300) );
+    arrTrucks.push( new Vehicle("truck 3", 400) );
+    arrTrucks.push( new Vehicle("truck 4", 300) );
+    arrTrucks.push( new Vehicle("truck 5", 400) );
 
 
+    //crate populaion
+    numMemberInPopulation = 10;
+    var p = new Population(arrLocals, arrTrucks, numMemberInPopulation);
+    //set selection mode
+    p.setSeletionMode(MODE_SEL_ELITIST);
+    //set variation mode
+    p.setVariationMode(MODE_VAR_CHANGE);
 
+    //if not have a erro
+    if(p.error != true){
+        //call generation of population
+        var numGeneration = 2;
+        p.generation( function(param, mode){
+             view.drawOnlyRoute(param[0].locals, mode);
+        }, numGeneration);
 
-    /** functiosn of interaction
-    $("#view").click( function(evt){
-        printDataTruck(evt,c.locals);
-    });
+    }
 
-    $("#bt-draw-route").click(function(evt){
-        drawOnlyRoute(c.locals);
-    });
-
-    $("#bt-draw-all").click(function(evt){
-        drawAll(c.locals);
-    });
-     **/
 });
-
-/* createPopulateInitial (method)
-* this method create the population bay locals, trucks and size of population desired
-* Prameter
-* arrLocal [array] - array of locals
-* arrTrucks [array] - array of trucks
-* sizepopulation [interger] - number of your population
-
-createPopulateInitial = function(arrLocals, arrTruck, sizepopulation){
-
-    arrPopulation = [];
-    //to complete population desired
-    while(arrPopulation.length < sizepopulation){
-            //make copy of arrays for not modify the data origial
-            var locals = copyArray(arrLocals)
-            var trucks = copyArray(arrTruck);
-            //count
-            qtdLocalCovered = 0;
-        console.log("**********************************************************************");
-           //while all locals not is covered
-            while(qtdLocalCovered < locals.length-1){
-
-
-                //sorted a number in array of locals range
-                var indexRandom = parseInt( (Math.random() * (locals.length-1)), 0) + 1;
-
-
-                console.log("tamanho do array "+locals.length+"  sorteado: "+indexRandom)
-
-                //save the old value
-                var oldqtdLocalCovered =qtdLocalCovered;
-
-                //verifying if local is free (no one truck cover yet)
-                if(verifyLocalIsFree( locals[indexRandom], trucks)){
-                    console.log("Local is free: "+indexRandom)
-                    //trun all trucks
-                    for(var i =0; i<trucks.length; i++){
-                        //verifying if the specific truck have capacity
-                        if(trucks[i].verifyHaveCapacity(locals[indexRandom].getDemand())){
-                            console.log("Truck "+trucks[i].getName()+" have  capacity C ("+trucks[i].getCapacity()+"), DC ("+trucks[i].getDemandCovered()+"), DA("+locals[indexRandom].getDemand()+")")
-                            //addlocal in route of this truck
-                            trucks[i].addLocal(locals[indexRandom]);
-                            //yeah!!
-                            qtdLocalCovered++;
-                            break;
-                        }else{
-                            console.log("Truck "+trucks[i].getName()+" NO have capacity C ("+trucks[i].getCapacity()+"), DC ("+trucks[i].getDemandCovered()+"), DA("+locals[indexRandom].getDemand()+")")
-                        }
-
-                    }
-                    //don't have truck for cover any local then it is a invalid route, restart...
-                    if(oldqtdLocalCovered == qtdLocalCovered){
-                        console.log(">>>>RESTART for imposible cover");
-                        var locals = copyArray(arrLocals)
-                        var trucks = copyArray(arrTruck);
-                        //count
-                        qtdLocalCovered = 0;
-                    }
-                }else{
-                    console.log("Local is NOT free: "+indexRandom)
-                }
-            }
-            //insert array truck gerated in array of population
-            arrPopulation.push(trucks);
-    }
-
-    //return population
-    return arrPopulation;
-
-}*/
-
-/*
- * verifyLocalIsFree [Method]
- * this method verify if local is free, this means if no one truck covered
- * local [Local] - a local who you wanna verify
- * arrtruck [Array] - array of Trucks
- */
-verifyLocalIsFree = function(local, arrTruck ){
-
-    for(var i = 0; i< arrTruck.length; i++){
-        var route= arrTruck[i].getRoute();
-
-        for(var j = 0; j< route.length; j++){
-            //if 'j' local in rout of 'i' track is iqual local, local not is free :(
-            if(route[j] == local)
-                return false;
-        }
-    }
-
-    return true;
-}
 
 
 /*

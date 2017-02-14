@@ -1,15 +1,20 @@
-/*This script have class and functions for view aplication*/
-
-//this is only array of color for diversify color
-color = ["#00a","#0a0", "#a00", "#a0a", "#aa0", "#0aa", "#0a1", "#01a"];
-
-/*
- drawLocals (Function)
- This is a function of draw locals icon in map
- parameter
- arrLocals [array] - is a array of type Local
+/**
+ This class
+ @constructor
+ @param {canvas} canvas - is a reference to canvas of HTML
+ @param {context} ctx - is a reference to context of canvas
  */
-function drawLocals(arrRoute){
+function View(canvas, ctx){
+    this.canvas = canvas;
+    this.ctx = ctx;
+    this.color = [];
+}
+
+/**
+  Draw locals icon in map
+  @param {array} arrLocals - Is a array of type Local
+ */
+View.prototype.drawLocals  = function(arrRoute){
     //this is size of image
     var width = 12;
     var height = 20;
@@ -17,16 +22,16 @@ function drawLocals(arrRoute){
     //turn all array
     for(var i = 0; i < arrRoute.route.length; i++){
         //set color of name
-        ctx.fillStyle = "#000000";
-        ctx.font="bold 12px Arial"
+        this.ctx.fillStyle = "#000000";
+        this.ctx.font="bold 12px Arial";
         //print name in x+10 and y - height
         var str = arrRoute.route[i][0].getName() +" ("+ arrRoute.route[i][0].getDemand()+")";
 
         //avoid name overflow in axis x
-        if(arrRoute.route[i][0].getX(0) + ctx.measureText(str).width < 500)
-            ctx.fillText (str, arrRoute.route[i][0].getX() + 10, arrRoute.route[i][0].getY() - height )
+        if(arrRoute.route[i][0].getX(0) + this.ctx.measureText(str).width < 500)
+            this.ctx.fillText (str, arrRoute.route[i][0].getX() + 10, arrRoute.route[i][0].getY() - height )
         else{
-            ctx.fillText (str, arrRoute.route[i][0].getX() - ctx.measureText(str).width, arrRoute.route[i][0].getY() - height )
+            this.ctx.fillText (str, arrRoute.route[i][0].getX() - this.ctx.measureText(str).width, arrRoute.route[i][0].getY() - height )
         }
 
 
@@ -37,19 +42,17 @@ function drawLocals(arrRoute){
             icon = local_icon2;
 
         //print image in x - (width/2) and y - height
-        ctx.drawImage(icon, arrRoute.route[i][0].x - (width/2), arrRoute.route[i][0].y - height, width, height);
+        this.ctx.drawImage(icon, arrRoute.route[i][0].x - (width/2), arrRoute.route[i][0].y - height, width, height);
 
     }
 }
 
-/*
- drawTruck (Function)
- This is a function of draw truck icon in map  parameter, and print
- your route and total cost os all truck
- arrTruck [array] - is a array of type Vehicle
+/**
+ Draw truck icon in map  parameter, and print your route and total cost os all truck
+ @param {array} arrTruck - Is a array of type Vehicle
  */
-function drawTruck(arrRoute){
-    var totalCost = 0;
+View.prototype.drawTruck  = function(arrRoute, mode){
+
     var tempTrucks = [];
 
 
@@ -73,47 +76,70 @@ function drawTruck(arrRoute){
         for(var j = 0; j < tempTrucks[i].length-1; j++){
 
              //start draw line process
-             ctx.beginPath();
+            this.ctx.beginPath();
              //set color
-             ctx.strokeStyle = color[i];
-             ctx.lineWidth = 2;
-             ctx.setLineDash([5, 15]);
+            this.ctx.strokeStyle = this.color[i];
+            this.ctx.lineWidth = 2;
+            this.ctx.setLineDash([5, 15]);
              //start point
 
-             ctx.moveTo(tempTrucks[i][j][0].getX(),tempTrucks[i][j][0].getY());
+            this.ctx.moveTo(tempTrucks[i][j][0].getX(),tempTrucks[i][j][0].getY());
              //end point
-             ctx.lineTo(tempTrucks[i][j+1][0].getX(),tempTrucks[i][j+1][0].getY());
+            this.ctx.lineTo(tempTrucks[i][j+1][0].getX(),tempTrucks[i][j+1][0].getY());
              //finish him! [F-A-T-A-L-I-T-Y]
-             ctx.stroke();
+            this.ctx.stroke();
 
-             ctx.setLineDash([0,0]);
+            this.ctx.setLineDash([0,0]);
 
             //have local in route (all truck have one local initial = central)
             var width = 20;
             var height = 20;
 
             //ctx.globalAlpha = 1;
-            if(j > 0 && j < tempTrucks[i].length-2)
-                ctx.drawImage(truck_icon[color[i]], tempTrucks[i][j][0].getX() - ((width/2)*0.7 ) ,tempTrucks[i][j][0].getY() - ((height/2)*0.7), width*0.7,height*0.7);
-            else if(j > 0)
-                ctx.drawImage(truck_icon[color[i]], tempTrucks[i][j][0].getX() - (width/2) , tempTrucks[i][j][0].getY() - (height/2), width,height);
-
+            if(j > 0 && j < tempTrucks[i].length-2){
+                this.ctx.fillStyle = this.color[i];
+                this.ctx.fill();
+                this.ctx.fillRect(  tempTrucks[i][j][0].getX() - ((width/2)*0.7 ) , tempTrucks[i][j][0].getY() - (((height*0.7)/2)*0.7), ( ( width *0.7) *0.7) , ((height*0.7)*0.5) );
+                this.ctx.drawImage(truck_icon[0], tempTrucks[i][j][0].getX() - ((width/2)*0.7 ) ,tempTrucks[i][j][0].getY() - ((height/2)*0.7), width*0.7,height*0.7);
+            }else if(j > 0){
+                //color[i]
+                this. ctx.fillStyle = this.color[i];
+                this.ctx.fill();
+                this.ctx.fillRect(  tempTrucks[i][j][0].getX() - (width/2) , tempTrucks[i][j][0].getY() - (height *0.7/2), width *0.7,height*0.5);
+                this.ctx.drawImage(truck_icon[0], tempTrucks[i][j][0].getX() - (width/2) , tempTrucks[i][j][0].getY() - (height/2), width,height);
+            }
         }
 
     }
+    this.ctx.fillStyle = "#000";
+    this.ctx.fill();
+    this.ctx.fillText ("Total cost: "+ arrRoute.getCost().toFixed(2),10, this.canvas.height - 10);
+
+    if(mode==1){
+
+        //functiosn of interaction
+        $("#view").click( function(evt){
+            view.printDataTruck(evt, arrRoute);
+        });
+
+        $("#bt-draw-route").click(function(evt){
+            view.drawOnlyRoute(arrRoute);
+        });
+
+        $("#bt-draw-all").click(function(evt){
+            view.drawAll(arrRoute);
+        });
 
 
-    ctx.fillText ("Total cost: "+ arrRoute.getCost().toFixed(2),10, canvas.height - 10);
+    }
 
 }
 
-/*
- drawRoute (Function)
- This is a function of draw Routes lines in map
- parameter
- arrLocals [array] - is a array of type Locals
+/**
+ This is a function of draw Routes lines in map parameter
+ @param {array} arrLocals - Is a array of type Locals
  */
-function drawRoute(arrRoute){
+View.prototype.drawRoute  = function(arrRoute){
     //turn all array locals
     console.log(arrRoute)
     for(var i = 0; i < arrRoute.route.length; i++){
@@ -121,20 +147,20 @@ function drawRoute(arrRoute){
 
         for(var j = 0; j < arrLocals.length; j++){
             //start draw line process
-            ctx.beginPath();
+            this.ctx.beginPath();
             //border
-            ctx.strokeStyle = "#888";
-            ctx.lineCap = "round";
-            ctx.lineWidth = 7;
-            ctx.moveTo(arrRoute.route[i][0].getX(), arrRoute.route[i][0].getY());
-            ctx.lineTo(arrLocals[j].getX(), arrLocals[j].getY());
-            ctx.stroke();
+            this.ctx.strokeStyle = "#888";
+            this.ctx.lineCap = "round";
+            this.ctx.lineWidth = 7;
+            this.ctx.moveTo(arrRoute.route[i][0].getX(), arrRoute.route[i][0].getY());
+            this.ctx.lineTo(arrLocals[j].getX(), arrLocals[j].getY());
+            this.ctx.stroke();
 
-            ctx.strokeStyle = "#fff";
-            ctx.lineWidth = 6;
-            ctx.moveTo(arrRoute.route[i][0].getX(), arrRoute.route[i][0].getY());
-            ctx.lineTo(arrLocals[j].getX(), arrLocals[j].getY());
-            ctx.stroke();
+            this.ctx.strokeStyle = "#fff";
+            this.ctx.lineWidth = 6;
+            this.ctx.moveTo(arrRoute.route[i][0].getX(), arrRoute.route[i][0].getY());
+            this.ctx.lineTo(arrLocals[j].getX(), arrLocals[j].getY());
+            this.ctx.stroke();
 
 
         }
@@ -148,25 +174,23 @@ function drawRoute(arrRoute){
         var route = arrLocals[i].getRoute();
         for(var j = 0; j < arrLocals[i].route.length; j++){
             //set color of name
-            ctx.fillStyle = "#000";
-            ctx.font="7px Arial"
+            this.ctx.fillStyle = "#000";
+            this.ctx.font="7px Arial"
             //print name in x+10 and y - height
             // raiz ( (Xa-Xb)² + (Ya-Yb)² )
             distance = Math.sqrt( Math.pow(arrLocals[i].getX() -  route[j].getX(), 2)  + Math.pow(arrLocals[i].getY() -  route[j].getY(), 2) );
-            ctx.fillText (distance.toFixed(2)+" km", (arrLocals[i].getX() + route[j].getX()) / 2, (arrLocals[i].getY()+route[j].getY() )/2);
+            this.ctx.fillText (distance.toFixed(2)+" km", (arrLocals[i].getX() + route[j].getX()) / 2, (arrLocals[i].getY()+route[j].getY() )/2);
         }
     }
 }
 
 
-/*
- printDataTruck (Function)
- This is a function call by click action, this show info about route
- parameter
- evt [event] - is a event of mouse (click)
- arrTruck [array] - iis a array of type Vehicle
- */
-function printDataTruck(evt, arrRoute){
+/**
+ This is a function call by click action, this show info about route parameter
+ @param {event} evt - Is a event of mouse (click)
+ @param {array} arrTruck - Is a array of type Vehicle
+*/
+View.prototype.printDataTruck  = function(evt, arrRoute){
 
     //get relative position mouse click
     var x = evt.pageX - $('#view').offset().left;
@@ -192,8 +216,6 @@ function printDataTruck(evt, arrRoute){
 
     for(var i = 0; i < tempTrucks.length; i++){
 
-        //tempTrucks[tempTrucks.length-2]
-
         //Do not have route
         if( tempTrucks[i].length == 2)
             continue;
@@ -211,7 +233,8 @@ function printDataTruck(evt, arrRoute){
             $("#div-data").css("left", evt.pageX);
 
             //set name of truck
-            $("#truck-name").text(tempTrucks[i][tempTrucks.length-2][1].getName() +" ("+tempTrucks[i][tempTrucks.length-2][1].getCapacityTotal()+")");
+            console.log(tempTrucks[i][2], tempTrucks.length-2)
+            $("#truck-name").text(tempTrucks[i][tempTrucks[i].length-2][1].getName() +" ("+tempTrucks[i][tempTrucks[i].length-2][1].getCapacityTotal()+")");
 
             //convert routs in string
             strRouts = "";
@@ -235,7 +258,7 @@ function printDataTruck(evt, arrRoute){
 
             $("#route-demand").text(totalDemand);
 
-            $("#header-div-data").css("backgroundColor", color[i]);
+            $("#header-div-data").css("backgroundColor", this.color[i]);
             target = true;
             break;
         }
@@ -251,30 +274,71 @@ function printDataTruck(evt, arrRoute){
 
 }
 
-function drawAll(arrRoute){
 
-    cleanCnavas();
+/**
+ Draw route, locals and trucks
+ @param {array} arrRoute - Is a array of type Route
+*/
+View.prototype.drawAll  = function(arrRoute){
+
+    this.cleanCanvas();
+
+    //gerating color randomize for leng of trucks
+    if(this.color.length == 0)
+        arrRoute.trucks.forEach(function(item){
+           this.color.push(this.getRandomColor());
+        }, this);
+
 
     /*functios for draw in canvas*/
     //draw routes
-    drawRoute(arrRoute);
+    this.drawRoute(arrRoute);
     //draw locals (icon)
-    drawLocals(arrRoute);
+    this.drawLocals(arrRoute);
     //draw truck (icon)
-    drawTruck(arrRoute);
+    this.drawTruck(arrRoute);
 
 }
 
-function drawOnlyRoute(arrRoute){
-    cleanCnavas();
+
+/**
+ Draw locals and trucks
+ @param {array} arrRoute - Is a array of type Route
+ */
+View.prototype.drawOnlyRoute = function(arrRoute, mode){
+    this.cleanCanvas();
+
+    //gerating color randomize for leng of trucks
+    if(this.color.length == 0)
+        arrRoute.trucks.forEach(function(item){
+            this.color.push(this.getRandomColor());
+        }, this);
 
     //draw truck (icon)
-    drawTruck(arrRoute);
+    this.drawTruck(arrRoute, mode);
 
-    drawLocals(arrRoute);
+    this.drawLocals(arrRoute);
+
+
 }
 
 
-function cleanCnavas(){
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+/**
+ Clean canvas
+ */
+View.prototype.cleanCanvas = function() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+}
+
+
+/**
+ To generate a random color
+*/
+View.prototype.getRandomColor = function() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
 }

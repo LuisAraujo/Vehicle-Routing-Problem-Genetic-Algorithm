@@ -1,7 +1,11 @@
-function Gene(route){
+function Gene(route, fitness){
     this.locals = route;
-    this.fitness = 0;
-    this.calcFitness();
+    if(fitness != undefined){
+        this.fitness = 0;
+        this.calcFitness();
+    }else{
+        this.fitness = fitness;
+    }
 }
 
 Gene.prototype.calcFitness= function(){
@@ -11,9 +15,7 @@ Gene.prototype.calcFitness= function(){
 
 }
 
-
 Gene.prototype.crossover = function(anotherGene){
-    console.log("CROSSS")
 
     var tempRoute1 = new Route(copyArray(arrLocals), copyArray(arrTrucks) );
     tempRoute1.startRoute();
@@ -28,10 +30,26 @@ Gene.prototype.crossover = function(anotherGene){
         //if is pair
         if(o%2 == 0){
             if(locals.route[o][0].getName()!="Central"){
-                 console.log(locals.route[o][0].getName(), anotherGene.locals.route[o][0].getName())
-                c1 = tempRoute1.setLocal(locals.route[o][0].getName(), locals.route[o][1].getName());
-                c2 = tempRoute2.setLocal(anotherGene.locals.route[o][0].getName(), anotherGene.locals.route[o][1].getName());
 
+                 if(verbose)
+                    console.log(locals.route[o][0].getName(), anotherGene.locals.route[o][0].getName())
+
+                //get route of same name
+                var selectedGene = null;
+                for(var x = 0; x < anotherGene.locals.route.length; x++){
+                   if(anotherGene.locals.route[x][0].getName() == locals.route[o][0].getName()){
+                       if(verbose)
+                         console.log("gene fouded");
+
+                       selectedGene = anotherGene.locals.route[x];
+                       break;
+                   }
+                }
+
+
+                c1 = tempRoute1.setLocal(locals.route[o][0].getName(), locals.route[o][1].getName());
+                //c2 = tempRoute2.setLocal(anotherGene.locals.route[o][0].getName(), anotherGene.locals.route[o][1].getName());
+                c2 = tempRoute2.setLocal(selectedGene[0].getName(), selectedGene[1].getName());
                 if(c1)
                     conflit1 = true;
                 if(c2)
@@ -42,10 +60,22 @@ Gene.prototype.crossover = function(anotherGene){
         }else{
             //console.log(o, locals.route[o]);
             if(locals.route[o][0].getName()!="Central"){
+                if(verbose)
+                    console.log(locals.route[o][0].getName(), anotherGene.locals.route[o][0].getName())
 
-                console.log(locals.route[o][0].getName(), anotherGene.locals.route[o][0].getName())
 
-                c1 = tempRoute1.setLocal(anotherGene.locals.route[o][0].getName(), anotherGene.locals.route[o][1].getName());
+                //get route of same name
+                var selectedGene = null;
+                anotherGene.locals.route.forEach(function(item){
+                    if(item[0].getName() == locals.route[o][0].getName()){
+                        if(verbose)
+                            console.log("gene fouded");
+
+                        selectedGene = item;
+                    }
+                });
+
+                c1 = tempRoute1.setLocal(selectedGene[0].getName(), selectedGene[1].getName());
                 c2 = tempRoute2.setLocal(locals.route[o][0].getName(), locals.route[o][1].getName());
 
                 if(c1)
@@ -60,12 +90,10 @@ Gene.prototype.crossover = function(anotherGene){
             a(++o, locals, anotherGene, callback);
         }else{
             if(conflit1){
-                //console.log("conf 1")
                callback(tempRoute1);
             }
 
             if(conflit2){
-                //console.log("conf 2")
                 callback(tempRoute2);
             }
         }
@@ -86,38 +114,23 @@ Gene.prototype.crossover = function(anotherGene){
 /*
 Gene.prototype.mutation = function(){
 
-   this.locals.route.forEach(function(item, index){
-        var indexRandom = parseInt( (Math.random() * (this.locals.route.length)), 0);
-        if (this.locals.route[indexRandom][0].getName() != "Central") {
-
-            if(item[0].getDemand() == this.locals.route[indexRandom][0].getDemand()){
-
-                var localAux = item[0];
-                item[0] = this.locals.route[indexRandom][0];
-                this.locals.route[indexRandom][0] = localAux;
-
-                console.log("Mutando " + item[0].getName()+" por "+  this.locals.route[indexRandom][0].getName(), indexRandom);
-          }
-        }
-
-   }, this);
-
-    this.fitness = this.calcFitness();
-
 }*/
 
 
 Gene.prototype.repair = function(route){
-    console.log("***REPARANDO***");
+    if(verbose)
+        console.log("***REPARANDO***");
     var l = route.getLocalNotCovered();
     var locals = l[0];
     var t = route.getTrucksWithCapacity();
     var trucks = t[0];
 
-    console.log("LOCAIS NÃO COBERTOS x COBERTOS");
-    console.log(locals, l[1]);
-    console.log("CAMINHÕES COM CAPACIDADE x CAPACIDADE");
-    console.log(trucks, t[1]);
+    if(verbose){
+        console.log("LOCAIS NÃO COBERTOS x COBERTOS");
+        console.log(locals, l[1]);
+        console.log("CAMINHÕES COM CAPACIDADE x CAPACIDADE");
+        console.log(trucks, t[1]);
+    }
 
     while (locals.length != 0){
         for(var k = 0; k < trucks.length; k++){
@@ -127,67 +140,27 @@ Gene.prototype.repair = function(route){
                 locals = l[0];
                 t = route.getTrucksWithCapacity();
                 trucks = t[0];
-                console.log("LOCAIS NÃO COBERTOS x COBERTOS");
-                console.log(locals, l[1]);
-                console.log("CAMINHÕES COM CAPACIDADE x CAPACIDADE");
-                console.log(trucks, t[1]);
+                if(verbose){
+                    console.log("LOCAIS NÃO COBERTOS x COBERTOS");
+                    console.log(locals, l[1]);
+                    console.log("CAMINHÕES COM CAPACIDADE x CAPACIDADE");
+                    console.log(trucks, t[1]);
+                }
 
                 break;
             }
         }
     }
 
-    /* //console.log("locias nao cobertos");
-    //console.log(locals, locals.length);
-
-    var aa = function(locals, trucks){
-        //console.log("CARALHOOOO... "+locals.length);
-        if(locals.length!=0){
-            var b = function(j, trucks, locals){
-
-                var conflit = route.setLocal(locals[0], trucks[j].getName(), true);
-
-                if(!conflit){
-                    indexLocal++;
-                    locals = route.getLocalNotCovered();
-                    console.log("locias nao cobertos");
-                    console.log(locals, locals.length);
-                }
-
-                if((j < trucks.length-1) && (conflit)){
-                    setTimeout(
-                        function(){b(++j, trucks, locals)
-                        },100);
-                }
-            }
-
-            setTimeout( function(){ aa(locals, trucks) }, 100);
-            b(0, trucks, locals);
-       }
-    }
-
-    aa(locals, trucks);
-
-*/
-
-//this.calcFitness();
-
-}
-
-/*
-* verifyConflitLocal [method]
-* arrTruck [array] - Array of Trucks
-* truck [Truck]
-* return 1 if have conflit of truck and 2 for conflit of route
-*/
-verifyConflitLocal = function(arrTrucks, truck){
-
 }
 
 
 
-repairRoute = function (tempRoute1, trucks, conflit, i){
+Gene.prototype.copy = function(){
+    newlocal = new Route(copyArray(this.locals.locals), copyArray(this.locals.trucks), this.locals.route, this.locals.cost);
+    return new Gene(newlocal, this.fitness);
 
 }
+
 
 

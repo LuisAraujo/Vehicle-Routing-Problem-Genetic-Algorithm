@@ -1,4 +1,4 @@
-function Route(arrLocals, arrTrucks){
+function Route(arrLocals, arrTrucks, route, cost){
     this.locals = arrLocals;
     /*
     arrLocals.forEach(function(item){
@@ -13,7 +13,15 @@ function Route(arrLocals, arrTrucks){
     */
 
     this.route = [];
+
+    if(route != undefined){
+      this.route = route;
+    }
+
     this.cost = 0;
+
+    if(cost != undefined)
+      this.cost = cost;
 }
 
 Route.prototype.setLocal = function(local_name, truck_name){
