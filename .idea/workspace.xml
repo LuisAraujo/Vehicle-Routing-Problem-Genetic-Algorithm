@@ -26,7 +26,7 @@
       <file leaf-file-name="index.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="42" selection-start="669" selection-end="669" vertical-scroll-proportion="0.49405548" vertical-offset="0" max-vertical-offset="1904">
+            <state line="25" column="53" selection-start="831" selection-end="831" vertical-scroll-proportion="0.5614267" vertical-offset="0" max-vertical-offset="1904">
               <folding />
             </state>
           </provider>
@@ -36,15 +36,6 @@
         <entry file="file://$PROJECT_DIR$/style/stylepage.css">
           <provider selected="true" editor-type-id="text-editor">
             <state line="135" column="23" selection-start="2259" selection-end="2259" vertical-scroll-proportion="0.0" vertical-offset="1699" max-vertical-offset="2516">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="View.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/script/View.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="272" column="0" selection-start="9166" selection-end="9166" vertical-scroll-proportion="-123.96154" vertical-offset="1401" max-vertical-offset="5933">
               <folding />
             </state>
           </provider>
@@ -352,13 +343,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/script/View.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="251" column="23" selection-start="7938" selection-end="7938" vertical-scroll-proportion="0.0" vertical-offset="714" max-vertical-offset="4488">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/script/model/Vehicle.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="129" column="0" selection-start="2888" selection-end="2888" vertical-scroll-proportion="0.0" vertical-offset="2193" max-vertical-offset="2295">
@@ -408,13 +392,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/script/View.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="251" column="23" selection-start="7938" selection-end="7938" vertical-scroll-proportion="0.0" vertical-offset="714" max-vertical-offset="4488">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/script/model/Vehicle.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="129" column="0" selection-start="2888" selection-end="2888" vertical-scroll-proportion="0.0" vertical-offset="2193" max-vertical-offset="2295">
@@ -453,13 +430,6 @@
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="17" column="43" selection-start="574" selection-end="574" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1615">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/script/View.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="96" column="47" selection-start="3253" selection-end="3292" vertical-scroll-proportion="0.0" vertical-offset="1491" max-vertical-offset="4148">
           <folding />
         </state>
       </provider>
@@ -513,13 +483,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/script/View.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="0" selection-start="892" selection-end="892" vertical-scroll-proportion="0.0" vertical-offset="476" max-vertical-offset="3757">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/script/model/Vehicle.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="32" column="8" selection-start="782" selection-end="782" vertical-scroll-proportion="0.0" vertical-offset="119" max-vertical-offset="1088">
@@ -555,13 +518,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/script/View.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="209" column="11" selection-start="6842" selection-end="6842" vertical-scroll-proportion="0.0" vertical-offset="2940" max-vertical-offset="3723">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/script/main.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="44" column="36" selection-start="1493" selection-end="1493" vertical-scroll-proportion="0.0" vertical-offset="748" max-vertical-offset="1037">
@@ -579,13 +535,6 @@
     <entry file="file://$PROJECT_DIR$/style/stylepage.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="36" column="14" selection-start="636" selection-end="636" vertical-scroll-proportion="0.0" vertical-offset="612" max-vertical-offset="833">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/script/View.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="209" column="11" selection-start="6842" selection-end="6842" vertical-scroll-proportion="0.0" vertical-offset="2979" max-vertical-offset="3723">
           <folding />
         </state>
       </provider>
@@ -611,13 +560,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/script/View.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="41" selection-start="885" selection-end="885" vertical-scroll-proportion="0.0" vertical-offset="385" max-vertical-offset="1360">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/script/main.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="13" column="35" selection-start="447" selection-end="447" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="731">
@@ -633,13 +575,6 @@
     <entry file="file://$PROJECT_DIR$/script/model/Local.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="9" column="41" selection-start="224" selection-end="265" vertical-scroll-proportion="-0.65384614" vertical-offset="0" max-vertical-offset="1343">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/script/View.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="272" column="0" selection-start="9166" selection-end="9166" vertical-scroll-proportion="-123.96154" vertical-offset="1401" max-vertical-offset="5933">
           <folding />
         </state>
       </provider>
@@ -695,7 +630,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="42" selection-start="669" selection-end="669" vertical-scroll-proportion="0.49405548" vertical-offset="0" max-vertical-offset="1904">
+        <state line="25" column="53" selection-start="831" selection-end="831" vertical-scroll-proportion="0.5614267" vertical-offset="0" max-vertical-offset="1904">
           <folding />
         </state>
       </provider>
