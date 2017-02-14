@@ -61,24 +61,28 @@ $(window).on("load",function(){
     arrTrucks.push( new Vehicle("truck 5", 400) );
 
 
-    //crate populaion
-    numMemberInPopulation = 10;
-    var p = new Population(arrLocals, arrTrucks, numMemberInPopulation);
-    //set selection mode
-    p.setSeletionMode(MODE_SEL_ELITIST);
-    //set variation mode
-    p.setVariationMode(MODE_VAR_CHANGE);
+    var p  = null;
+    $("#bt-play").click( function(){
+        if(p == null){
+            //crate populaion
+            numMemberInPopulation = 10;
+            var p = new Population(arrLocals, arrTrucks, numMemberInPopulation);
+            //set selection mode
+            p.setSeletionMode(MODE_SEL_ELITIST);
+            //set variation mode
+            p.setVariationMode(MODE_VAR_CHANGEORDERROUTE);
 
-    //if not have a erro
-    if(p.error != true){
-        //call generation of population
-        var numGeneration = 2;
-        p.generation( function(param, mode){
-             view.drawOnlyRoute(param[0].locals, mode);
-        }, numGeneration);
+            //if not have a erro
+            if(p.error != true){
+                //call generation of population
+                var numGeneration = 100;
+                p.generation( function(param, mode){
+                     view.drawOnlyRoute(param[0].locals, mode);
+                }, numGeneration);
 
-    }
-
+            }
+        }
+    });
 });
 
 

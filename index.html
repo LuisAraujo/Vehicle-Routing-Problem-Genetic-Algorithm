@@ -33,13 +33,31 @@
 <body>
 <div id="title">
     Vehicle Routing Problem - View
+    <img id="bt-play" src="images/btplay.png" style="">
 </div>
 
 <div id="div-menu-left">
+    <div class="no-line">Number of Generation</div>
+    <input type="text" placeholder="100">
+    <div class="no-line">Selection Mode</div>
+    <select>
+        <option>Elitist</option>
+        <option>Survivel Childs</option>
+    </select>
+
+
+    <div class="line">Variation Mode</div>
+    <select>
+        <option>Change Route</option>
+        <option>Change Order Locals</option>
+    </select>
+
+    <div class="line">Draw</div>
+
     <div  id="bt-draw-route" class="bt-menu-left">Draw only routes</div>
     <div id="bt-draw-all" class="bt-menu-left">Draw all paths</div>
 
-    <div class="line">Draw each truck</div>
+
 
 </div>
 <div id="div-canvas">

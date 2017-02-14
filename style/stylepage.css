@@ -106,6 +106,13 @@ html, body{
     border-top: 1px solid #eeeeee;
 }
 
+.no-line{
+    margin-top: 10px;
+    text-align: center;
+    color: #eeeeee;
+}
+
+
 #div-select{
     margin-top: 10px;
     margin-left: 10px;
@@ -113,4 +120,24 @@ html, body{
 
 #div-select select{
     width: calc( 100% - 10px);
+}
+
+#bt-play{
+    position: fixed; top: 10px; margin-left: 10px; height: 25px; width: 25px;
+}
+
+#bt-play:hover{
+    cursor: pointer;
+}
+
+#div-menu-left select{
+    width: 90%;
+    margin-left:  5%;
+    text-align: center;
+}
+
+#div-menu-left input{
+    width: 40%;
+    margin-left: 30%;
+    text-align: center;
 }
