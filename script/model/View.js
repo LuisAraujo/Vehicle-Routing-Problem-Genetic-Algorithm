@@ -123,10 +123,16 @@ View.prototype.drawTruck  = function(arrRoute, mode){
         });
 
         $("#bt-draw-route").click(function(evt){
+            $("#view").show();
+            $("#graphs").hide();
+            $("#title-view").show();
             view.drawOnlyRoute(arrRoute);
         });
 
         $("#bt-draw-all").click(function(evt){
+            $("#view").show();
+            $("#graphs").hide();
+            $("#title-view").show();
             view.drawAll(arrRoute);
         });
 

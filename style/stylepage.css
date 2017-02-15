@@ -19,8 +19,20 @@ html, body{
     background-color: #dfdfdf;
     border-radius: 5px;
     margin-left: calc( 50% - 250px);
-    margin-top: 50px;
 }
+
+#graphs{
+    display: block;
+    border: #797979;
+    background-color: #ffffff;
+    border-radius: 5px;
+    margin-left: calc( 50% - 450px);
+    height: 500px;
+    width:  900px;
+    display: none;
+    margin-top: 30px;
+}
+
 
 #title{
     width: 100%;
@@ -136,8 +148,19 @@ html, body{
     text-align: center;
 }
 
-#div-menu-left input{
+#div-menu-left input[type='text']{
     width: 40%;
     margin-left: 30%;
     text-align: center;
+}
+
+
+#div-menu-left button{
+    width: 50%;
+    margin-left: 25%;
+    text-align: center;
+}
+
+#container-pos{
+    display: none;
 }

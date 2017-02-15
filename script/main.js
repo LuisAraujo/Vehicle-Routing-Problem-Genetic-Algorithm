@@ -6,6 +6,8 @@ const  MODE_VAR_CHANGEROUTE = 0;
 const  MODE_VAR_CHANGEORDERROUTE = 1;
 
 $(window).on("load",function(){
+     //set seed
+     Math.seedrandom('AAaBbCc');
      //get canvas of html
      var canvas = document.getElementById("view");
      //get context 2d of canvas
@@ -17,72 +19,89 @@ $(window).on("load",function(){
     /* setting locals */
     //arrLocals is a array with all locals
     window.arrLocals = [];
-    //addeding new locals
-    arrLocals.push( new Local("Central", 250, 250, "diposit") );
-    arrLocals.push( new Local("Buger King", 20, 70, "client", 100) );
-    arrLocals.push( new Local("MC Donald's", 450, 50, "client", 100) );
-    arrLocals.push( new Local("Subway", 250, 120, "client", 100) );
-    arrLocals.push( new Local("Bob's", 50, 450, "client", 100) );
-    arrLocals.push( new Local("Giraffa's", 450, 450, "client", 100) );
-    arrLocals.push( new Local("Giraffa's 2", 150, 430, "client", 100) );
-    arrLocals.push( new Local("Giraffa's 3", 100, 300, "client", 100) );
-
-    arrLocals.push( new Local("Buger King 2", 240, 370, "client", 100) );
-    arrLocals.push( new Local("MC Donald's 2", 120, 150, "client", 100) );
-    arrLocals.push( new Local("Subway 2", 400, 200, "client", 100) );
-    arrLocals.push( new Local("Bob's 2", 450, 330, "client", 100) );
-
-    arrLocals.push( new Local("Buger King 3", 200, 80, "client", 100) );
-    arrLocals.push( new Local("MC Donald's 3", 350, 150, "client", 100) );
-    arrLocals.push( new Local("Subway 3", 260, 190, "client", 100) );
-    arrLocals.push( new Local("Bob's 3", 50, 200, "client", 100) );
-
-
-
-    //criate way for all locals (is possible go to any local from any local)
-    for(var i = 0; i < arrLocals.length; i++){
-        var arr = [];
-        for(var j = 0; j < arrLocals.length; j++){
-            if( i != j){
-                arr.push(arrLocals[j]);
-            }
-            arrLocals[i].setRoute(arr);
-        }
-    }
-
 
     //arrLocals is a array with all trucks
     window.arrTrucks = [];
-    //addeding new truck
-    arrTrucks.push( new Vehicle("truck 1", 400) );
-    arrTrucks.push( new Vehicle("truck 2", 300) );
-    arrTrucks.push( new Vehicle("truck 3", 400) );
-    arrTrucks.push( new Vehicle("truck 4", 300) );
-    arrTrucks.push( new Vehicle("truck 5", 400) );
 
+    window.p  = null;
 
-    var p  = null;
     $("#bt-play").click( function(){
-        if(p == null){
+        var numgeneration = parseInt($("#text-generation").val());
+        if(isNaN( numgeneration)){
+            alert("Insira um número de gerações válido!");
+            return;
+        }
+
+        var selc = $("#select-selection option:selected").val();
+        var selc2 = $("#select-validation option:selected").val();
+
+        if ((p == null) || (p.generationNumber < numgeneration)){
             //crate populaion
             numMemberInPopulation = 10;
-            var p = new Population(arrLocals, arrTrucks, numMemberInPopulation);
+            p = new Population(arrLocals, arrTrucks, numMemberInPopulation);
             //set selection mode
-            p.setSeletionMode(MODE_SEL_ELITIST);
+            if(selc == 0)
+                p.setSeletionMode(MODE_SEL_ELITIST);
+            else if(selc ==1)
+                p.setSeletionMode(MODE_SEL_SURVIVAL);
             //set variation mode
-            p.setVariationMode(MODE_VAR_CHANGEORDERROUTE);
+            if(selc2 ==0)
+                p.setVariationMode(MODE_VAR_CHANGEROUTE);
+            else if(selc2 == 1)
+                p.setVariationMode(MODE_VAR_CHANGEORDERROUTE);
 
             //if not have a erro
             if(p.error != true){
                 //call generation of population
-                var numGeneration = 100;
                 p.generation( function(param, mode){
-                     view.drawOnlyRoute(param[0].locals, mode);
-                }, numGeneration);
-
+                    view.drawOnlyRoute(param[0].locals, mode);
+                }, numgeneration);
             }
         }
     });
+
+
+    $("#bt-file-data").click(function(){
+        $("#file-data").trigger("click");
+    });
+
+    $("#bt-draw-graphs").click(function(){
+        $("#view").hide();
+        $("#graphs").show();
+        $("#title-view").hide();
+
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            //click buttom prediction
+            var arrdata = [  ['Generation', 'Best fitness', 'AVG fitness']  ];
+
+            var avgfitness = p.statistic.getAVGFitnessByGeneration();
+            var thebestfitness = p.statistic.getTheFitnessByGeneration();
+
+             for(var i=0; i< avgfitness.length; i++){
+                arrdata.push( [ i+1,  thebestfitness[i], avgfitness[i]] );
+            };
+
+            var options = {
+                title: 'Fitness over generation',
+                curveType: 'function',
+                legend: { position: 'bottom' }
+            };
+
+            var data = google.visualization.arrayToDataTable(arrdata);
+            var chart = new google.visualization.LineChart(document.getElementById('graphs'));
+
+            chart.draw(data, options);
+        }
+
+    });
+
+    document.getElementById('file-data').onchange = function() {
+        readFileByLine(this, function(data){setLocals(data)}, function(data){setTrucks(data)});
+    };
+
 });
 
 
@@ -97,4 +116,75 @@ copyArray = function(array){
         newarray.push( array[i].copy() );
     }
     return newarray;
+}
+
+
+
+function readFileByLine(p, callback1, callback2){
+    var file = p.files[0];
+    var reader = new FileReader();
+    var arrDatas = Object;
+    arrDatas.locals = [];
+    arrDatas.trucks = [];
+    var mode = "";
+
+    reader.onload = function(progressEvent){
+        // By lines
+        var lines = this.result.split('\n');
+
+        for(var line = 0; line < lines.length; line++){
+            var l = lines[line].replace(/(?:\r\n|\r|\n)/g, '');
+
+            if(l == "LOCALS"){
+              mode = "locals";
+                continue;
+            }else if(l == "TRUCKS"){
+              mode = "trucks";
+                continue;
+            }
+
+            if(mode == "locals"){
+                arrDatas.locals.push(lines[line]);
+            }else if(mode == "trucks"){
+                arrDatas.trucks.push(lines[line]);
+             }
+        }
+
+        callback1(arrDatas.locals);
+        callback2(arrDatas.trucks);
+    };
+
+    reader.readAsText(file);
+};
+
+
+function setLocals(arrLocalAsString){
+
+    arrLocalAsString.forEach(function(item){
+        var it = item.split("|");
+        var l = new Local(it[0], parseInt(it[1]), parseInt(it[2]), it[3], parseInt(it[4]) );
+        arrLocals.push(l);
+    });
+
+    //criate way for all locals (is possible go to any local from any local)
+    for(var i = 0; i < arrLocals.length; i++){
+        var arr = [];
+        for(var j = 0; j < arrLocals.length; j++){
+            if( i != j){
+                arr.push(arrLocals[j]);
+            }
+            arrLocals[i].setRoute(arr);
+        }
+    }
+}
+
+
+function setTrucks(arrTrucksAsString){
+
+    arrTrucksAsString.forEach(function(item){
+        var it = item.split("|");
+        var l = new Vehicle(it[0], parseInt(it[1]));
+        arrTrucks.push(l);
+    });
+
 }

@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="style/stylepage.css">
     <!-- jquery -->
     <script src="script/libs/jquery.js"></script>
+    <script src="script/libs/seedrandom.min.js"></script>
 
     <!--class GA-->
     <script src="script/model/Gene.js"></script>
@@ -28,7 +29,14 @@
 
     <script src="script/main.js"></script>
 
-   <!-- <link href="https://fonts.googleapis.com/css?family=Sansita" rel="stylesheet"> -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+
+
+    <script>
+    google.charts.load('current', {'packages':['corechart']});
+    </script>
+    <link href="https://fonts.googleapis.com/css?family=Sansita" rel="stylesheet">
 </head>
 <body>
 <div id="title">
@@ -37,32 +45,44 @@
 </div>
 
 <div id="div-menu-left">
-    <div class="no-line">Number of Generation</div>
-    <input type="text" placeholder="100">
-    <div class="no-line">Selection Mode</div>
-    <select>
-        <option>Elitist</option>
-        <option>Survivel Childs</option>
-    </select>
+    <div class="no-line">File od data</div>
+    <div  id="bt-file-data" class="bt-menu-left">Select Data</div>
 
+    <input  id="file-data" type="file" accept="text/plain" hidden>
+
+    <div class="no-line">Number of Generation</div>
+    <input id="text-generation" type="text" placeholder="100">
+
+    <div class="no-line">Selection Mode</div>
+    <select id="select-selection">
+        <option value="0">Elitist</option>
+        <option value="1">Survival Childs</option>
+    </select>
 
     <div class="line">Variation Mode</div>
-    <select>
-        <option>Change Route</option>
-        <option>Change Order Locals</option>
+    <select id="select-validation">
+        <option value="0">Change Route</option>
+        <option value="1">Change Order Locals</option>
     </select>
 
-    <div class="line">Draw</div>
+    <div id="container-pos">
+        <div class="line">Draw</div>
 
-    <div  id="bt-draw-route" class="bt-menu-left">Draw only routes</div>
-    <div id="bt-draw-all" class="bt-menu-left">Draw all paths</div>
+        <div  id="bt-draw-route" class="bt-menu-left">Draw only routes</div>
+        <div id="bt-draw-all" class="bt-menu-left">Draw all paths</div>
 
-
+        <div class="line">Graphs</div>
+        <div  id="bt-draw-graphs" class="bt-menu-left">Show Graphs</div>
+    </div>
 
 </div>
 <div id="div-canvas">
     <!-- canvas main -->
+    <div id="title-view" style="color: #eeeeee; margin-top: 50px; text-align: center">
+        <span id="numgen">Generation ##</span>
+    </div>
     <canvas id="view" width="500" height="500"></canvas>
+    <div id="graphs"></div>
 
     <!-- div data turck -->
     <div id="div-data">
@@ -101,6 +121,12 @@ local_icon.src = "images/local.png";
 var local_icon2 = new Image();
 local_icon2.src = "images/local_center.png";
 </script>
+
+<script type="text/javascript">
+
+
+</script>
+
 
 </body>
 </html>
