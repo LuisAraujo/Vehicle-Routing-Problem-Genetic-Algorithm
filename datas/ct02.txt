@@ -1,0 +1,26 @@
+LOCALS
+Central|480|480|diposit|0
+MC Donald's|50|50|client|100
+MC Donald's 2|20|150|client|100
+MC Donald's 3|10|150|client|100
+Bob's|50|50|client|100
+Bob's 2|75|70|client|100
+Bob's 3|48|200|client|100
+Giraffa's|55|250|client|100
+Giraffa's 2|12|230|client|100
+Giraffa's 3|10|200|client|100
+Giraffa's 4|15|180|client|100
+Buger King|23|70|client|100
+Buger King 2|80|270|client|100
+Buger King 3|65|80|client|100
+Buger King 4|62|75|client|100
+Subway|25|120|client|100
+Subway 2|43|100|client|100
+Subway 3|26|130|client|100
+Subway 4|40|100|client|100
+Subway 5|32|130|client|100
+TRUCKS
+truck 1|1200
+truck 2|600
+truck 3|600
+truck 4|600

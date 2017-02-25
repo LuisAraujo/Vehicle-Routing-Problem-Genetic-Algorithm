@@ -1,0 +1,23 @@
+LOCALS
+Central|490|0|diposit|0
+Buger King|20|70|client|100
+MC Donald's|450|50|client|100
+Subway|250|120|client|100
+Bob's|50|450|client|100
+Giraffa's|450|450|client|100
+Giraffa's 2|150|430|client|100
+Giraffa's 3|100|300|client|100
+Buger King 2|240|370|client|100
+MC Donald's 2|120|150|client|100
+Subway 2|400|200|client|100
+Bob's 2|450|330|client|100
+Buger King 3|200|80|client|100
+MC Donald's 3|350|150|client|100
+Subway 3|260|190|client|100
+Bob's 3|50|200|client|100
+TRUCKS
+truck 1|400
+truck 2|300
+truck 3|400
+truck 4|300
+truck 5|400

@@ -283,7 +283,7 @@ View.prototype.printDataTruck  = function(evt, arrRoute){
 
 /**
  Draw route, locals and trucks
- @param {array} arrRoute - Is a array of type Route
+ @param {array} arrRoute - Is a array of type Gene
 */
 View.prototype.drawAll  = function(arrRoute){
 
@@ -309,7 +309,7 @@ View.prototype.drawAll  = function(arrRoute){
 
 /**
  Draw locals and trucks
- @param {array} arrRoute - Is a array of type Route
+ @param {array} arrRoute - Is a array of type Gene
  */
 View.prototype.drawOnlyRoute = function(arrRoute, mode){
     this.cleanCanvas();

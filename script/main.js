@@ -1,6 +1,6 @@
 /* this script run when page is loaded*/
 const  MODE_SEL_ELITIST = 0;
-const  MODE_SEL_SURVIVAL = 1;
+const  MODE_SEL_ROULETTE = 1;
 
 const  MODE_VAR_CHANGEROUTE = 0;
 const  MODE_VAR_CHANGEORDERROUTE = 1;
@@ -8,6 +8,7 @@ const  MODE_VAR_CHANGEORDERROUTE = 1;
 $(window).on("load",function(){
      //set seed
      Math.seedrandom('AAaBbCc');
+
      //get canvas of html
      var canvas = document.getElementById("view");
      //get context 2d of canvas
@@ -37,13 +38,13 @@ $(window).on("load",function(){
 
         if ((p == null) || (p.generationNumber < numgeneration)){
             //crate populaion
-            numMemberInPopulation = 10;
+            numMemberInPopulation = 40;
             p = new Population(arrLocals, arrTrucks, numMemberInPopulation);
             //set selection mode
             if(selc == 0)
                 p.setSeletionMode(MODE_SEL_ELITIST);
             else if(selc ==1)
-                p.setSeletionMode(MODE_SEL_SURVIVAL);
+                p.setSeletionMode(MODE_SEL_ROULETTE);
             //set variation mode
             if(selc2 ==0)
                 p.setVariationMode(MODE_VAR_CHANGEROUTE);
@@ -85,13 +86,17 @@ $(window).on("load",function(){
             };
 
             var options = {
-                title: 'Fitness over generation',
-                curveType: 'function',
-                legend: { position: 'bottom' }
+                chart: {
+                    title: 'Fitness over generation',
+                    subtitle: 'in millions of dollars (USD)'
+                },
+                width: 900,
+                height: 500
+
             };
 
             var data = google.visualization.arrayToDataTable(arrdata);
-            var chart = new google.visualization.LineChart(document.getElementById('graphs'));
+            var chart = new google.charts.Line(document.getElementById('graphs'));
 
             chart.draw(data, options);
         }
@@ -99,7 +104,13 @@ $(window).on("load",function(){
     });
 
     document.getElementById('file-data').onchange = function() {
-        readFileByLine(this, function(data){setLocals(data)}, function(data){setTrucks(data)});
+        readFileByLine(this, function(data){
+            window.arrLocals = [];
+            setLocals(data)},
+            function(data){
+                window.arrTrucks = [];
+                setTrucks(data)
+            });
     };
 
 });
@@ -150,6 +161,11 @@ function readFileByLine(p, callback1, callback2){
              }
         }
 
+        console.log("Qtd Locais "+ arrDatas.locals.length);
+        console.log("Qtd Caminhões "+ arrDatas.trucks.length);
+
+
+
         callback1(arrDatas.locals);
         callback2(arrDatas.trucks);
     };
@@ -176,6 +192,13 @@ function setLocals(arrLocalAsString){
             arrLocals[i].setRoute(arr);
         }
     }
+
+
+    /*arrLocals.sort(function(a, b) {
+        return a[a.length-1] - b[b.length-1];
+    });
+
+    arrLocals.sort();*/
 }
 
 
@@ -186,5 +209,14 @@ function setTrucks(arrTrucksAsString){
         var l = new Vehicle(it[0], parseInt(it[1]));
         arrTrucks.push(l);
     });
+
+
+    arrTrucks.sort(function(a, b) {
+        return  b.capacityCurrent -  a.capacityCurrent;
+    });
+
+    arrTrucks.sort();
+
+    console.log(arrTrucks)
 
 }

@@ -1,166 +1,169 @@
-function Gene(route, fitness){
-    this.locals = route;
-    if(fitness != undefined){
-        this.fitness = 0;
-        this.calcFitness();
+//gene
+function Gene(arrLocals, arrTrucks, route, cost){
+    this.locals = arrLocals;
+    this.trucks = arrTrucks;
+
+    this.route = [];
+
+    if(route != undefined){
+      this.route = route;
+    }
+
+    this.cost = 0;
+
+    if(cost != undefined)
+      this.cost = cost;
+}
+
+Gene.prototype.setLocal = function(local_name, truck_name){
+    var conflit = false;
+
+    if(typeof truck_name == 'string')
+        tempTruck = this.getTruckByName(truck_name);
+    else{
+        tempTruck = truck_name;
+    }
+
+    //TRUCKS
+    if(typeof local_name == 'string')
+        tempLocal = this.getLocalByName(local_name);
+    else
+        tempLocal = local_name;
+
+
+    if((tempTruck!=null) && (tempLocal != null)){
+
+        if(tempTruck.getCapacityCurrent() >= tempLocal.getDemand()){
+            tempTruck.addDemand( tempLocal.getDemand());
+            this.route.push( [tempLocal,  tempTruck] );
+        }else{
+            //console.log("error em "+local_name + " "+ truck_name+ " "+ ch );
+            return true;
+        }
     }else{
-        this.fitness = fitness;
+        console.log("truck or local is null "+local_name + " "+ truck_name );
+    }
+
+
+    return false;
+}
+
+Gene.prototype.getTruckByName = function(truck_name){
+    for(var i=0; i< this.trucks.length; i++){
+        if(this.trucks[i].getName() == truck_name){
+           return this.trucks[i];
+        }
+    };
+}
+
+Gene.prototype.getLocalByName = function(local_name){
+    for(var z=0; z< this.locals.length  ; z++){
+        if(this.locals[z].getName() == local_name){
+            return this.locals[z];
+        }
+    };
+}
+
+Gene.prototype.startRoute = function(){
+    for(var i=0; i< this.trucks.length; i++){
+            this.setLocal( this.locals[0], this.trucks[i]);
+            //this.setLocal("Central", this.trucks[i].getName());
     }
 }
 
-Gene.prototype.calcFitness= function(){
-
-    var fitness = this.locals.getCost();
-    this.fitness = fitness;
-
+Gene.prototype.endRoute = function(){
+    for(var i=0; i< this.trucks.length; i++){
+        //this.setLocal("Central", this.trucks[i].getName());
+        this.setLocal(this.locals[0], this.trucks[i]);
+    }
 }
 
-Gene.prototype.crossover = function(anotherGene){
 
-    var tempRoute1 = new Route(copyArray(arrLocals), copyArray(arrTrucks) );
-    tempRoute1.startRoute();
-    var tempRoute2 = new Route(copyArray(arrLocals), copyArray(arrTrucks) );
-    tempRoute2.startRoute();
+Gene.prototype.getRoute = function(){
+   return this.route;
+}
 
-    var conflit1 = false;
-    var conflit2 = false;
 
-   a = function(o, locals, anotherGene, callback){
+Gene.prototype.getCost = function(){
 
-        //if is pair
-        if(o%2 == 0){
-            if(locals.route[o][0].getName()!="Central"){
+    this.cost = 0;
+    var tempTrucks = [];
 
-                 if(verbose)
-                    console.log(locals.route[o][0].getName(), anotherGene.locals.route[o][0].getName())
 
-                //get route of same name
-                var selectedGene = null;
-                for(var x = 0; x < anotherGene.locals.route.length; x++){
-                   if(anotherGene.locals.route[x][0].getName() == locals.route[o][0].getName()){
-                       if(verbose)
-                         console.log("gene fouded");
-
-                       selectedGene = anotherGene.locals.route[x];
-                       break;
-                   }
+    for(var i = 0; i< this.trucks.length; i++){
+        for(var j = 0; j< this.route.length; j++){
+            if(this.route[j][1].getName() == this.trucks[i].getName()){
+                if(tempTrucks[i] == undefined){
+                    tempTrucks[i] = [];
                 }
-
-
-                c1 = tempRoute1.setLocal(locals.route[o][0].getName(), locals.route[o][1].getName());
-                //c2 = tempRoute2.setLocal(anotherGene.locals.route[o][0].getName(), anotherGene.locals.route[o][1].getName());
-                c2 = tempRoute2.setLocal(selectedGene[0].getName(), selectedGene[1].getName());
-                if(c1)
-                    conflit1 = true;
-                if(c2)
-                    conflit2 = true;
-            }
-
-         //no is pair
-        }else{
-            //console.log(o, locals.route[o]);
-            if(locals.route[o][0].getName()!="Central"){
-                if(verbose)
-                    console.log(locals.route[o][0].getName(), anotherGene.locals.route[o][0].getName())
-
-
-                //get route of same name
-                var selectedGene = null;
-                anotherGene.locals.route.forEach(function(item){
-                    if(item[0].getName() == locals.route[o][0].getName()){
-                        if(verbose)
-                            console.log("gene fouded");
-
-                        selectedGene = item;
-                    }
-                });
-
-                c1 = tempRoute1.setLocal(selectedGene[0].getName(), selectedGene[1].getName());
-                c2 = tempRoute2.setLocal(locals.route[o][0].getName(), locals.route[o][1].getName());
-
-                if(c1)
-                    conflit1 = true;
-                if(c2)
-                    conflit2 = true;
-            }
-
-        }
-
-        if(o < locals.route.length-1){
-            a(++o, locals, anotherGene, callback);
-        }else{
-            if(conflit1){
-               callback(tempRoute1);
-            }
-
-            if(conflit2){
-                callback(tempRoute2);
+                tempTrucks[i].push(this.route[j]);
             }
         }
-
     };
 
-    a(0, this.locals, anotherGene, this.repair);
+    for(var i=0; i< tempTrucks.length; i++){
 
-
-    tempRoute1.endRoute();
-    tempRoute2.endRoute();
-
-
-    return [new Gene(tempRoute1), new Gene(tempRoute2)];
-
-}
-
-/*
-Gene.prototype.mutation = function(){
-
-}*/
-
-
-Gene.prototype.repair = function(route){
-    if(verbose)
-        console.log("***REPARANDO***");
-    var l = route.getLocalNotCovered();
-    var locals = l[0];
-    var t = route.getTrucksWithCapacity();
-    var trucks = t[0];
-
-    if(verbose){
-        console.log("LOCAIS NÃO COBERTOS x COBERTOS");
-        console.log(locals, l[1]);
-        console.log("CAMINHÕES COM CAPACIDADE x CAPACIDADE");
-        console.log(trucks, t[1]);
+        for(var j=0; j< tempTrucks[i].length-1; j++){
+           this.cost += Math.sqrt( Math.pow( tempTrucks[i][j][0].getX() -  tempTrucks[i][j+1][0].getX(), 2)  + Math.pow(tempTrucks[i][j][0].getY() -  tempTrucks[i][j+1][0].getY(), 2) );
+        };
     }
 
-    while (locals.length != 0){
-        for(var k = 0; k < trucks.length; k++){
-            var conflit = route.setLocal(locals[0],  trucks[k]);
-            if(!conflit){
-                l = route.getLocalNotCovered();
-                locals = l[0];
-                t = route.getTrucksWithCapacity();
-                trucks = t[0];
-                if(verbose){
-                    console.log("LOCAIS NÃO COBERTOS x COBERTOS");
-                    console.log(locals, l[1]);
-                    console.log("CAMINHÕES COM CAPACIDADE x CAPACIDADE");
-                    console.log(trucks, t[1]);
-                }
+    return this.cost;
+}
 
-                break;
-            }
+
+Gene.prototype.getLocals = function(){
+    return this.locals;
+}
+
+Gene.prototype.getTrucks = function(){
+    return this.trucks;
+}
+
+Gene.prototype.setRoute = function(arrRoutes){
+    this.route = arrRoutes;
+}
+
+
+Gene.prototype.getLocalNotCovered = function(){
+      var locals = [];
+      var localsCov = [];
+
+      for(var i = 1; i< this.locals.length; i++){
+          var flag = false;
+          for(var j = 0; j< this.route.length; j++){
+             if(this.locals[i].getName() == this.route[j][0].getName()){
+                 if(flag)
+                   console.log("ATENDE MAIS DE UMA VEZ: "+this.route[j][0].getName())
+
+                 flag = true;
+                 //break;
+             }
+          }
+
+          if(!flag){
+              locals.push(this.locals[i].getName())
+          }else{
+              localsCov.push(this.locals[i].getName())
+          }
+      }
+
+    return [locals, localsCov];
+
+};
+
+
+
+Gene.prototype.getTrucksWithCapacity = function(){
+    var trucks = [];
+    var trucksCap = [];
+
+    for(var l = 0; l< this.trucks.length; l++){
+        if(this.trucks[l].getCapacityCurrent() > 0){
+            trucks.push(this.trucks[l].getName());
+            trucksCap.push(this.trucks[l].getCapacityCurrent());
         }
     }
 
-}
-
-
-
-Gene.prototype.copy = function(){
-    newlocal = new Route(copyArray(this.locals.locals), copyArray(this.locals.trucks), this.locals.route, this.locals.cost);
-    return new Gene(newlocal, this.fitness);
-
-}
-
-
-
+    return [trucks, trucksCap];
+};

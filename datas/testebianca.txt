@@ -1,0 +1,17 @@
+LOCALS
+A|250|250|diposit|0
+B|360|70|client|10
+C|450|60|client|20
+D|420|110|client|30
+E|480|190|client|40
+F|250|210|client|70
+G|290|460|client|25
+H|115|490|client|25
+I|40|180|client|70
+J|440|330|client|10
+L|90|390|client|100
+TRUCKS
+truck 1|150
+truck 2|150
+truck 3|150
+truck 4|10

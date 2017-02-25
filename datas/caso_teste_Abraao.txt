@@ -1,0 +1,20 @@
+LOCALS
+Central|175|67|diposit|0
+Buger King|266|388|client|55
+Buger King 2|453|83|client|50
+Buger King 3|390|112|client|80
+Buger King 4|112|153|client|75
+Bob's|411|301|client|40
+Bob's 2|100|100|client|70
+Bob's 3|182|231|client|80
+Bob's 4|81|382|client|40
+Bob's 5|259|346|client|65
+Giraffa's|301|69|client|50
+Giraffa's 2|312|238|client|75
+TRUCKS
+truck 1|150
+truck 2|200
+truck 3|200
+truck 4|100
+truck 5|100
+truck 6|200
