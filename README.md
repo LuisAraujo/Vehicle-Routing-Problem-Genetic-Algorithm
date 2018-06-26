@@ -23,3 +23,10 @@ Vehicle Routing Problem using Genetic Algorthm in Javascript.
 
 ### Previews
 
+![Examples 01](https://github.com/LuisAraujo/Vehicle-Routing-Problem-Genetic-Algorithm/blob/master/example01.png?raw=true)
+
+![Examples 2](https://github.com/LuisAraujo/Vehicle-Routing-Problem-Genetic-Algorithm/blob/master/example02.png?raw=true)
+
+![Gerate Graphs](https://github.com/LuisAraujo/Vehicle-Routing-Problem-Genetic-Algorithm/blob/master/showgraphs.png?raw=true)
+
+![Gerate Graph 2](https://github.com/LuisAraujo/Vehicle-Routing-Problem-Genetic-Algorithm/blob/master/showgraphs2.png?raw=true)
