@@ -1,4 +1,4 @@
-Vehicle Routing Problem using Genetic Algorthm in Javascript.
+Vehicle Routing Problem using Genetic Algorithm in Javascript.
 =========================
 
 
